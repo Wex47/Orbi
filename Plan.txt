@@ -42,3 +42,8 @@ Geocoding tool (name → lat/lon)
 Weather / climate tool (lat/lon → facts)
    ↓
 LLM reasoning (facts → advice)
+
+Future improvements:
+- Add profiling per travel type - for example, for ski travel we want very low temperature and snow,
+for summer travel we want decent temperature with no rain, etc.
+- enables both string format (date name, i.e. march, may) and other formats, such as month 4, or actual date, such as 1.1.2001
