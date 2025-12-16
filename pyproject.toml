@@ -5,4 +5,5 @@ description = "Conversational travel agent"
 requires-python = ">=3.10"
 dependencies = [
     "langchain[anthropic,google-genai,openai]>=1.2.0",
+    "python-dotenv>=1.2.1",
 ]
