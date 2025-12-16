@@ -29,3 +29,16 @@ Add GUI, more robust strategies for the data fusion, halliciations, prompts, dec
 
 Iteration 2 -
 cleanup, best practices, transcript, video recording, pdf\readme manual with explanations. 
+
+
+--------------------------------------------------------------
+
+Question 1 flow:
+
+Place name (Paris / Japan / Tel Aviv)
+   ↓
+Geocoding tool (name → lat/lon)
+   ↓
+Weather / climate tool (lat/lon → facts)
+   ↓
+LLM reasoning (facts → advice)

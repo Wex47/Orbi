@@ -7,3 +7,11 @@ dependencies = [
     "langchain[anthropic,google-genai,openai]>=1.2.0",
     "python-dotenv>=1.2.1",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
