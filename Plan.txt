@@ -1,0 +1,28 @@
+
+# Orbi planning your next journey, effortlessly #
+
+Orbi is a helpful TRAVEL AGENT.
+
+Core queries:
+1) Seasons + weather: Open ended - best season? close ended - seasons for destination X/ for date X? 
+2) Travel cost? break down to flight, hotels, transportation, food, entretaiment, shopping, Insurance etc...
+3) Travel recommendations
+
+Additionals:
+4) Does the flight go over some countries (potentially - link with the travel warning malal)
+5) Vaccinations?
+6) Tips
+7) TBD.
+
+
+Implementation plan:
+
+MVP - 
+Fullfil the core requirements.
+agent should work end to end, use context (conversational history), use enough APIs (2) and answer enough queries (3), offer CLI.
+Implement basic strategies for the data fusion, preventing halliciations, reasoning,prompts, etc..
+
+Iteration - Post MVP
+Fine tuning and optimizations.
+Answer more questions + more API integrations.
+Add GUI, more robust strategies for the data fusion, halliciations, prompts, decisions, friendliness, chain-of-thought, PragmaticQA. 
