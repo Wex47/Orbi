@@ -28,7 +28,7 @@ Answer more questions + more API integrations.
 Add GUI, more robust strategies for the data fusion, halliciations, prompts, decisions, friendliness, chain-of-thought, PragmaticQA. 
 
 Iteration 2 -
-cleanup, best practices, transcript, video recording, pdf\readme manual with explanations. 
+cleanup, document, best practices, transcript, video recording, pdf\readme manual with explanations. 
 
 
 --------------------------------------------------------------

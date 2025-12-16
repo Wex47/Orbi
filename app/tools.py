@@ -24,3 +24,10 @@ def get_place_climate(place_name: str, month: str) -> str:
 
     except Exception as e:
         return str(e)
+
+
+# app/tools.py
+
+TRAVEL_TOOLS = [
+    get_place_climate
+]
