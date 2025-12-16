@@ -1,0 +1,8 @@
+[project]
+name = "Orbi"
+version = "0.1.0"
+description = "Conversational travel agent"
+requires-python = ">=3.10"
+dependencies = [
+    "langchain[anthropic,google-genai,openai]>=1.2.0",
+]

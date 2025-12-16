@@ -1,5 +1,5 @@
 
-# Orbi planning your next journey, effortlessly #
+# Orbi - planning your next journey, effortlessly #
 
 Orbi is a helpful TRAVEL AGENT.
 
@@ -22,7 +22,10 @@ Fullfil the core requirements.
 agent should work end to end, use context (conversational history), use enough APIs (2) and answer enough queries (3), offer CLI.
 Implement basic strategies for the data fusion, preventing halliciations, reasoning,prompts, etc..
 
-Iteration - Post MVP
+Iteration 1 - Post MVP
 Fine tuning and optimizations.
 Answer more questions + more API integrations.
 Add GUI, more robust strategies for the data fusion, halliciations, prompts, decisions, friendliness, chain-of-thought, PragmaticQA. 
+
+Iteration 2 -
+cleanup, best practices, transcript, video recording, pdf\readme manual with explanations. 
