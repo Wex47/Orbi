@@ -40,7 +40,6 @@ class AmadeusAuth:
         response.raise_for_status()
         payload = response.json()
 
-        print(payload)
         self._access_token = payload["access_token"]
 
         # subtract 60s as a safety buffer
