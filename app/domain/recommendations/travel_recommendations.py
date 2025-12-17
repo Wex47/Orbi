@@ -22,7 +22,7 @@ def get_travel_recommendations(
         country_code=country_code,
     )
 
-    if not city_data:
+    if not city_data or "error" in city_data:
         return {"error": f"Could not find city '{city}'"}
 
     experiences = get_top_k_destination_experiences(

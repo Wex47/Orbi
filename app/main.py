@@ -34,7 +34,7 @@
 
 
 from app.agents.agent import AGENT, Context
-from app.facts_policy import requires_facts, tools_were_used
+from app.facts_policy import tools_were_used
 
 
 def main() -> None:
@@ -56,22 +56,16 @@ def main() -> None:
             context=context,
         )
 
-
-        needs_disclaimer = (
-            requires_facts(user_input)
-            and not tools_were_used(response)
-        )
-
         # Unified agent returns messages + optional structured output
         if "structured_response" in response:
             print("Assistant:", response["structured_response"])
         else:
             print("Assistant:", response["messages"][-1].content)
 
-        if needs_disclaimer:
+        if not tools_were_used(response):
             print(
-                "***Note: This answer is based on general knowledge, "
-                "not retrieved data.***"
+                "***Note: This answer is based on knowledge of the LLM, "
+                "not retrieved data from tools.***"
             )
 
         print()
