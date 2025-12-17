@@ -1,11 +1,10 @@
 # app/domain/destination_experiences.py
 
 from typing import List, Dict
-from app.domain.amadeus_client import AmadeusClient
+from app.infrastructure.amadeus_client import get_amadeus_client
 
 
 def get_top_k_destination_experiences(
-    client: AmadeusClient,
     latitude: float,
     longitude: float,
     radius_km: int = 1,
@@ -25,6 +24,8 @@ def get_top_k_destination_experiences(
     Returns:
         List of activity dicts sorted by quality
     """
+    
+    client = get_amadeus_client()
 
     response = client.get(
         "/v1/shopping/activities",

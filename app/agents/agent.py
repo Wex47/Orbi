@@ -1,16 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-
-from dotenv import load_dotenv
-
 from langchain.agents import create_agent
 from langchain.chat_models import init_chat_model
 from langgraph.checkpoint.memory import InMemorySaver
-
-from app.tools import TRAVEL_TOOLS
-
-load_dotenv()
+from app.tools.tools import TRAVEL_TOOLS
+from app.config.settings import settings
 
 
 # -------------------------------------------------------------------
@@ -41,8 +36,8 @@ class Context:
 # -------------------------------------------------------------------
 
 _model = init_chat_model(
-    "claude-sonnet-4-5-20250929",
-    temperature=0.2,
+    settings.MODEL_NAME,
+    temperature=settings.MODEL_TEMP,
 )
 
 _checkpointer = InMemorySaver()

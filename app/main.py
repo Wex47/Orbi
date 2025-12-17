@@ -1,4 +1,4 @@
-from app.agent import AGENT, Context
+from app.agents.agent import AGENT, Context
 
 
 def main() -> None:

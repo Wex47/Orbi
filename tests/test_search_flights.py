@@ -2,9 +2,9 @@ from dotenv import load_dotenv
 from datetime import date, timedelta
 from pprint import pprint
 
-from app.domain.amadeus_auth import AmadeusAuth
-from app.domain.amadeus_client import AmadeusClient
-from app.domain.flight_search import search_flights
+from app.infrastructure.amadeus_auth import AmadeusAuth
+from app.infrastructure.amadeus_client_impl import AmadeusClient
+from app.domain.flights.flight_search import search_flights
 
 load_dotenv()
 
@@ -25,7 +25,7 @@ load_dotenv()
 #     pprint(f)
 
 
-from app.domain.flight_search_tool import create_flight_search_tool
+from app.domain.flights.flight_search_tool import create_flight_search_tool
 
 flight_search = create_flight_search_tool()
 

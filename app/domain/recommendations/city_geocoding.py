@@ -1,10 +1,8 @@
-# app/domain/city_geocoding.py
 
 from typing import Optional, Dict
-from app.domain.amadeus_client import AmadeusClient
+from app.infrastructure.amadeus_client import get_amadeus_client
 
 def get_city_coordinates(
-    client: AmadeusClient,
     keyword: str,
     *,
     country_code: Optional[str] = None,
@@ -29,6 +27,8 @@ def get_city_coordinates(
         }
         or None if no city found
     """
+
+    client = get_amadeus_client()
 
     params = {
         "keyword": keyword,

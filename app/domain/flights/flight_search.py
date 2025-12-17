@@ -1,10 +1,12 @@
-# app/domain/flight_search.py
+# flight_search.py
 
-from typing import List, Dict, Any
 from datetime import date
+from typing import List, Dict, Any
+from app.infrastructure.amadeus_client import get_amadeus_client
+
+FLIGHT_OFFERS_PATH = "/v2/shopping/flight-offers"
 
 def search_flights(
-    client,
     origin: str,
     destination: str,
     departure_date: date,
@@ -13,9 +15,7 @@ def search_flights(
     adults: int = 1,
     max_results: int = 5,
 ) -> List[Dict[str, Any]]:
-    """
-    Search flight offers between two cities.
-    """
+    client = get_amadeus_client()
 
     params = {
         "originLocationCode": origin,
@@ -28,24 +28,18 @@ def search_flights(
     if return_date:
         params["returnDate"] = return_date.isoformat()
 
-    print(params)
-    response = client.get(
-        "/v2/shopping/flight-offers",
-        params=params,
-    )
+    response = client.get(FLIGHT_OFFERS_PATH, params=params)
 
     offers = []
-
     for item in response.get("data", []):
-        price = item.get("price", {})
         itinerary = item["itineraries"][0]
         segments = itinerary["segments"]
 
         offers.append({
             "id": item.get("id"),
-            "total_price": price.get("total"),
-            "currency": price.get("currency"),
-            "duration": itinerary.get("duration"),
+            "total_price": item["price"]["total"],
+            "currency": item["price"]["currency"],
+            "duration": itinerary["duration"],
             "segments": [
                 {
                     "from": s["departure"]["iataCode"],

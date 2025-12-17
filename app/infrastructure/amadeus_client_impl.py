@@ -1,10 +1,10 @@
 import requests
 from typing import Dict, Any
-from app.domain.amadeus_auth import AmadeusAuth
+from app.infrastructure.amadeus_auth import AmadeusAuth
+from app.config.settings import settings
 
 
 class AmadeusClient:
-    BASE_URL = "https://test.api.amadeus.com"
 
     def __init__(self, auth: AmadeusAuth):
         self.auth = auth
@@ -13,13 +13,13 @@ class AmadeusClient:
         token = self.auth.get_access_token()
 
         response = requests.get(
-            f"{self.BASE_URL}{path}",
+            f"{settings.AMADEUS_BASE_URL}{path}",
             headers={
                 "Authorization": f"Bearer {token}",
                 "Accept": "application/json",
             },
             params=params,
-            timeout=10,
+            timeout=settings.HTTP_TIMEOUT,
         )
 
         response.raise_for_status()

@@ -1,19 +1,13 @@
-# app/domain/amadeus_auth.py
-
 import time
 import requests
 from typing import Optional
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
+from app.config.settings import settings
 
 class AmadeusAuth:
-    TOKEN_URL = "https://test.api.amadeus.com/v1/security/oauth2/token"
 
     def __init__(self):
-        self.api_key = os.getenv("AMADEUS_API_KEY")
-        self.api_secret = os.getenv("AMADEUS_API_SECRET")
+        self.api_key = settings.AMADEUS_API_KEY
+        self.api_secret = settings.AMADEUS_API_SECRET
 
         self._access_token: Optional[str] = None
         self._expires_at: float = 0.0
@@ -27,7 +21,7 @@ class AmadeusAuth:
             return self._access_token
 
         response = requests.post(
-            self.TOKEN_URL,
+            settings.AMADEUS_TOKEN_URL,
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             data={
                 "grant_type": "client_credentials",
@@ -46,9 +40,3 @@ class AmadeusAuth:
         self._expires_at = time.time() + payload["expires_in"] - 60
 
         return self._access_token
-
-
-# Just to verify its working
-# auth = AmadeusAuth()
-# token = auth.get_access_token()
-# print(token)
