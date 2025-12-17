@@ -62,8 +62,6 @@ def search_flights_tool(
     )
 
 
-
-
 #########################
 
 

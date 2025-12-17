@@ -61,10 +61,13 @@ _model = init_chat_model(
 # Conversation state is persisted on the application side and is re-sent to the LLM on each turn.
 _checkpointer = InMemorySaver()
 
+
+
 AGENT = create_agent(
     model=_model,
     system_prompt=SYSTEM_PROMPT,
     tools=TRAVEL_TOOLS,
     context_schema=Context,
     checkpointer=_checkpointer,
+    debug = True # dev
 )
