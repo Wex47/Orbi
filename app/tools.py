@@ -49,9 +49,42 @@ def travel_recommendations_tool(
     )
 
 
+########################################
+
+
+from langchain.tools import tool
+from app.domain.flight_search_tool import create_flight_search_tool
+
+flight_search = create_flight_search_tool()
+
+@tool
+def search_flights_tool(
+    origin: str,
+    destination: str,
+    departure_date: str,
+    return_date: str | None = None,
+    adults: int = 1,
+    max_results: int = 5,
+):
+    """
+    Search for flight offers between two cities.
+    Dates must be in YYYY-MM-DD format.
+    """
+    return flight_search(
+        origin=origin,
+        destination=destination,
+        departure_date=departure_date,
+        return_date=return_date,
+        adults=adults,
+        max_results=max_results,
+    )
+
+
+
 # app/tools.py
 
 TRAVEL_TOOLS = [
     get_place_climate,
-    travel_recommendations_tool
+    travel_recommendations_tool,
+    search_flights_tool
 ]
