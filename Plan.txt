@@ -47,3 +47,22 @@ Future improvements:
 - Add profiling per travel type - for example, for ski travel we want very low temperature and snow,
 for summer travel we want decent temperature with no rain, etc.
 - enables both string format (date name, i.e. march, may) and other formats, such as month 4, or actual date, such as 1.1.2001
+
+
+Question 3 flow:
+
+User request (natural language)
+        ↓
+Agent (LLM)
+        ↓
+Recommendations Tool
+        ↓
+City → Coordinates
+        ↓
+Coordinates → Activities
+        ↓
+Rank / Filter / Top-K
+        ↓
+Structured recommendations
+        ↓
+Agent explains results to user

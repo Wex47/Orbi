@@ -1,6 +1,9 @@
 from langchain.tools import tool
 from app.domain.geo import geocode_place
 from app.domain.climate import get_monthly_climate_by_coords
+from app.domain.travel_recommendations import (
+    create_travel_recommendations_tool
+)
 
 @tool
 def get_place_climate(place_name: str, month: str) -> str:
@@ -26,8 +29,29 @@ def get_place_climate(place_name: str, month: str) -> str:
         return str(e)
 
 
+#########################
+
+travel_recommendations = create_travel_recommendations_tool()
+
+@tool
+def travel_recommendations_tool(
+    city: str,
+    country_code: str | None = None,
+    k: int = 5,
+):
+    """
+    Get top travel experiences for a city.
+    """
+    return travel_recommendations(
+        city=city,
+        country_code=country_code,
+        k=k,
+    )
+
+
 # app/tools.py
 
 TRAVEL_TOOLS = [
-    get_place_climate
+    get_place_climate,
+    travel_recommendations_tool
 ]
