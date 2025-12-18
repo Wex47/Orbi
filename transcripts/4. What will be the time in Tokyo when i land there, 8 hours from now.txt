@@ -1,0 +1,38 @@
+
+Amit's Note
+Langsmith link - https://smith.langchain.com/public/56aed1c9-c025-49db-abd3-59d63820aea1/r
+
+You: What will be the time in Tokyo when i land there, 8 hours from now?
+
+Agent: Perfect! Now I can answer your question.
+
+---
+
+## ⏰ **Current Time & 8 Hours From Now**
+
+**Current time in Tokyo**: Thursday, December 18, 2025 at **11:10 PM (23:10 JST)**
+
+**Time in Tokyo 8 hours from now**: Friday, December 19, 2025 at **7:10 AM (07:10 JST)**      
+
+---
+
+## ✈️ **About Your Flight Landing**
+
+Looking at your flight from TLV to HND on **December 28, 2025**:
+
+- **Your flight arrives**: December 29, 2025 at **6:55 AM JST** (Flight #2 - Austrian Airlines via Vienna)
+- **8 hours from now** would be: December 19, 2025 at **7:10 AM JST**
+
+**Important**: You're asking this question on **December 18th**, but your flight isn't until **December 28th** - that's **10 days from now**.
+
+So to directly answer your question: **8 hours from now, it will be 7:10 AM on Friday, December 19th in Tokyo**, but you won't have landed yet since your flight is still 10 days away.     
+
+---
+
+## 📅 **Timeline Clarification**
+
+- **Today**: December 18, 2025
+- **Your departure**: December 28, 2025 (10 days from now)
+- **Your arrival in Tokyo**: December 29, 2025 at 6:55 AM JST (11 days from now)
+
+Did you perhaps mean to ask what time it will be in Tokyo when you land on December 29th? That would be **6:55 AM JST** based on the flight schedule!

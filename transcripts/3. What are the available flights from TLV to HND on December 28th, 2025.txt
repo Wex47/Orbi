@@ -1,0 +1,92 @@
+
+Amit's Note:
+Langsmith link - https://smith.langchain.com/public/2d65a7cb-cfac-4045-b1ed-d6a56bbd5953/r
+
+You: What are the available flights from TLV to HND on December 28th, 2025?
+
+Agent: Perfect! I found several flight options for you. Here are the **available flights from Tel Aviv (TLV) to Tokyo Haneda (HND) on December 28th, 2025**:
+
+---
+
+## ✈️ **Best Flight Options**
+
+### 🏆 **BEST OPTION - Shortest Duration**
+**Flight #2: Austrian Airlines via Vienna**
+- **Price**: €741.17
+- **Total Duration**: 17 hours 50 minutes
+- **Route**: TLV → Vienna (VIE) → HND
+- **Schedule**:
+  - Depart TLV: Dec 28, 6:05 AM → Arrive VIE: 8:50 AM (OS 860)
+  - Depart VIE: Dec 28, 10:25 AM → Arrive HND: Dec 29, 6:55 AM (OS 8563)
+- **Layover**: 1 hour 35 minutes in Vienna
+- ✅ **Why it's best**: Fastest option, reasonable layover, arrives early morning
+
+---
+
+### 💰 **CHEAPEST OPTION**
+**Flight #1: Air India via Delhi**
+- **Price**: €738.36 (cheapest!)
+- **Total Duration**: 27 hours 45 minutes
+- **Route**: TLV → Delhi (DEL) → HND
+- **Schedule**:
+  - Depart TLV: Dec 28, 9:10 PM → Arrive DEL: Dec 29, 6:10 AM (AI 140)
+  - Depart DEL: Dec 29, 8:20 PM → Arrive HND: Dec 30, 7:55 AM (AI 358)
+- **Layover**: 14 hours 10 minutes in Delhi
+- ⚠️ **Note**: Very long layover, but you could explore Delhi or rest at the airport
+
+---
+
+### 🌟 **ALTERNATIVE OPTIONS**
+
+**Flight #3: Austrian Airlines via Vienna (Alternative)**
+- **Price**: €741.17
+- **Duration**: 18 hours
+- **Schedule**: Depart TLV 5:55 AM, same connection as Flight #2
+- Very similar to Flight #2, just 10 minutes earlier departure
+
+**Flight #5: Lufthansa via Frankfurt**
+- **Price**: €752.38
+- **Duration**: 20 hours 25 minutes
+- **Schedule**:
+  - Depart TLV: Dec 28, 5:15 AM → Arrive FRA: 8:55 AM
+  - Depart FRA: Dec 28, 11:30 AM → Arrive HND: Dec 29, 8:40 AM
+- **Layover**: 2 hours 35 minutes in Frankfurt
+
+**Flight #4: Lufthansa via Munich**
+- **Price**: €750.96
+- **Duration**: 30 hours 45 minutes
+- **Schedule**: Depart TLV Dec 28, 5:10 PM → Long overnight layover in Munich
+- ⚠️ **Note**: Longest journey with overnight layover
+
+---
+
+## 📊 **Quick Comparison**
+
+| Rank | Airline | Via | Price | Duration | Arrival |
+|------|---------|-----|-------|----------|---------|
+| 🥇 | Austrian | Vienna | €741 | 17h 50m | Dec 29, 6:55 AM |
+| 🥈 | Lufthansa | Frankfurt | €752 | 20h 25m | Dec 29, 8:40 AM |
+| 🥉 | Austrian | Vienna | €741 | 18h 00m | Dec 29, 6:55 AM |
+| 💰 | Air India | Delhi | €738 | 27h 45m | Dec 30, 7:55 AM |
+
+---
+
+## 💡 **My Recommendation**
+
+**Book Flight #2 (Austrian Airlines via Vienna)** - It offers:
+- ✅ Shortest travel time (under 18 hours)
+- ✅ Competitive price (only €3 more than cheapest)
+- ✅ Reasonable layover time (not too short, not too long)
+- ✅ Arrives early morning, giving you a full day in Tokyo
+- ✅ European carrier with good service standards
+
+---
+
+## 📝 **Important Notes**
+
+- **Timing**: You're traveling during the New Year holiday period, which is very popular in Japan
+- **Season**: Late December is winter in Tokyo (cold but beautiful, with New Year celebrations)
+- **Prices**: These are economy class fares and may change based on availability
+- **Booking**: I recommend booking soon as holiday season flights fill up quickly
+
+Would you like me to search for return flights as well, or do you need any other information about your Tokyo trip?
