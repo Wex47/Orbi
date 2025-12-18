@@ -23,20 +23,6 @@ def get_chat_model(*, streaming: bool = False, temperature: Optional[float] = No
     return _CHAT_MODEL_CACHE[key]
 
 
-# def get_verifier_model():
-#     global _VERIFIER_MODEL
-
-#     print(f"@@@@ GCP: {os.getenv('GOOGLE_CLOUD_PROJECT')} @@@@@")
-#     if _VERIFIER_MODEL is None:
-#         _VERIFIER_MODEL = init_chat_model(
-#             settings.VERIFIER_MODEL_NAME,
-#             temperature=settings.VERIFIER_TEMP,
-#             streaming=False,
-#         )
-    
-#     return _VERIFIER_MODEL
-
-
 def get_verifier_model():
     global _VERIFIER_MODEL
 
