@@ -88,8 +88,55 @@ def travel_recommendations_tool(
 ########################################
 
 
+from app.domain.time.timezone_service import get_current_time_by_timezone
+
+@tool
+def get_current_time(timezone: str) -> dict:
+    """
+    Retrieve the current local time and timezone metadata using a real-time API.
+
+    IMPORTANT:
+    - This tool PROVIDES real-time information.
+    - Use this tool whenever the user asks for the current time, date,
+      or timezone information for any location.
+    - Do NOT answer such questions without calling this tool.
+    - Do NOT state that you lack real-time access if this tool is available.
+
+    Input:
+        timezone (str): Timezone in Area/Location or Area/Location/Region format.
+                        Examples:
+                        - "Europe/London"
+                        - "Asia/Tokyo"
+                        - "America/Argentina/Salta"
+
+    Output:
+        {
+            "abbreviation": str,
+            "datetime": str,
+            "day_of_week": int,
+            "day_of_year": int,
+            "dst": bool,
+            "dst_from": str | null,
+            "dst_offset": int,
+            "dst_until": str | null,
+            "raw_offset": int,
+            "timezone": str,
+            "unixtime": int,
+            "utc_datetime": str,
+            "utc_offset": str,
+            "week_number": int
+        }
+    """
+    return get_current_time_by_timezone(timezone)
+
+
+
+
+#########################################
+
 TRAVEL_TOOLS = [
     get_place_climate,
     travel_recommendations_tool,
-    search_flights_tool
+    search_flights_tool,
+    get_current_time
 ]

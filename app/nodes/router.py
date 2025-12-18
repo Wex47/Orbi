@@ -11,6 +11,8 @@ Decide whether the user's message requires:
 or
 - a direct conversational answer (DIRECT)
 
+if you are unsure, go with PLAN.
+
 Return ONLY one word: PLAN or DIRECT.
 """.strip()
 
