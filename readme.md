@@ -69,6 +69,7 @@ app/
 ├── domain/           # Pure domain logic (e.g. geocoding, climate, flights)
 ├── infrastructure/   # LLM singletons and external API clients
 ├── tools/            # LangChain tool wrappers around domain functions
+├── nodes/            # LangGraph nodes (router, execution, verifier, finalizer)
 ├── graph.py          # LangGraph definition and node wiring
 ├── agents/           # Agent logic and configuration
 ├── config/           # Configuration and environment settings
