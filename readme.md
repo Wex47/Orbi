@@ -61,6 +61,19 @@ Streaming Output
 - **External APIs** – Provide factual grounding
 - **Verifier Model** – Detects hallucination risk
 
+
+### Code structure
+
+app/
+├── domain/           # Pure domain logic (e.g. geocoding, climate, flights)
+├── infrastructure/   # LLM singletons and external API clients
+├── tools/            # LangChain tool wrappers around domain functions
+├── graph.py          # LangGraph definition and node wiring
+├── agents/           # Agent logic and configuration
+├── config/           # Configuration and environment settings
+└── main.py           # CLI entry point
+
+
 ---
 
 ## 🔄 System Flow (Step by Step)
