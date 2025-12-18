@@ -62,9 +62,12 @@
 # app/config/settings.py
 
 import os
-from typing import Optional
+from typing import Optional, Dict, Tuple
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from langchain.chat_models import init_chat_model
 
+from dotenv import load_dotenv
+load_dotenv()  # <-- must be before BaseSettings is instantiated
 
 class Settings(BaseSettings):
     # --------------------
@@ -102,11 +105,39 @@ class Settings(BaseSettings):
     # --------------------
     HTTP_TIMEOUT: int = 10
 
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        extra="forbid",
-    )
+
+    # ------------------------------------------------------------------
+    # Pydantic config
+    # ------------------------------------------------------------------
+
+    # ------------------------------------------------------------------
+    # INTERNAL MODEL CACHE (class-level)
+    # ------------------------------------------------------------------
+    _model_cache: Dict[Tuple[str, float], object] = {}
+
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
+    def get_chat_model(
+        self,
+        *,
+        temperature: Optional[float] = None,
+    ):
+        """
+        Return a cached LangChain chat model.
+
+        Models are cached per (MODEL_NAME, temperature).
+        """
+        temp = self.MODEL_TEMP if temperature is None else temperature
+        key = (self.MODEL_NAME, temp)
+
+        if key not in self._model_cache:
+            self._model_cache[key] = init_chat_model(
+                self.MODEL_NAME,
+                temperature=temp,
+            )
+
+        return self._model_cache[key]
 
 
 
