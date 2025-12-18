@@ -1,0 +1,12 @@
+
+Amit's Note
+Langsmith link - https://smith.langchain.com/public/bd2001cc-8955-422a-9a80-4713bf85ae38/r
+
+--------------------------------------------------------------
+
+You: What was the second question i asked you? just repeat the question, nothing else
+
+Agent: What are the best activities to do there?
+
+---
+***This answer is based on the LLM Knowledge and was not grounded in tool invocation.***
