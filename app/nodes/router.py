@@ -11,7 +11,9 @@ Decide whether the user's message requires:
 or
 - a direct conversational answer (DIRECT)
 
-if you are unsure, go with PLAN.
+Speical rules:
+- Determine if the query is related to travel. if not - go with DIRECT.
+- if you are unsure which path to take, go with PLAN.
 
 Return ONLY one word: PLAN or DIRECT.
 """.strip()
