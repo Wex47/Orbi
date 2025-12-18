@@ -51,7 +51,7 @@ Execution Node (tool or direct reasoning)
   ↓
 Finalizer Node (LLM response + verification)
   ↓
-Streaming Output
+Output
 ```
 
 ### Key Modules
@@ -64,6 +64,7 @@ Streaming Output
 
 ### Code structure
 
+```text
 app/
 ├── domain/           # Pure domain logic (e.g. geocoding, climate, flights)
 ├── infrastructure/   # LLM singletons and external API clients
