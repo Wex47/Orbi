@@ -72,8 +72,7 @@ app/
 ├── graph.py          # LangGraph definition and node wiring
 ├── agents/           # Agent logic and configuration
 ├── config/           # Configuration and environment settings
-└── main.py           # CLI entry point
-
+└── main.py           # CLI entry point```
 
 ---
 
