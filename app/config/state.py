@@ -14,5 +14,6 @@ class State(TypedDict):
     route: Optional[Literal["DIRECT", "PLAN"]]
     plan: Optional[list[str]]
     execution: Optional[str]
+    tools_used: bool
     verified: Optional[bool]
     final_answer: Optional[str]
