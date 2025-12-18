@@ -82,6 +82,12 @@ class Settings(BaseSettings):
     MODEL_NAME: str = "claude-sonnet-4-5-20250929"
     MODEL_TEMP: float = 0.2
 
+    # --------------------
+    # Verifier Model (Gemini)
+    # --------------------
+    VERIFIER_MODEL_NAME: str = "gemini-2.5-flash"
+    VERIFIER_TEMP: float = 0.0
+
     # Model API keys
     OPENAI_API_KEY: Optional[str] = None
     GOOGLE_API_KEY: Optional[str] = None

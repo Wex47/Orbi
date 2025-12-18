@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.config.settings import settings
+from app.infrastructure.llm import get_chat_model
 
 
 ROUTER_SYSTEM = """
@@ -20,7 +20,7 @@ Return ONLY one word: PLAN or DIRECT.
 
 
 def router_node(state: dict) -> dict:
-    model = settings.get_chat_model()
+    model = get_chat_model()
     messages = [{"role": "system", "content": ROUTER_SYSTEM}] + state["messages"]
     out = model.invoke(messages).content.strip().upper()
 

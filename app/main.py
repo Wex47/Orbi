@@ -108,6 +108,8 @@ def main():
 
         print("\nAgent:", result["final_answer"])
 
+        print()  # newline after full response
+
 
 if __name__ == "__main__":
     main()

@@ -72,15 +72,12 @@ from __future__ import annotations
 
 from langchain.agents import create_agent
 from langchain_core.messages import ToolMessage
-
-from app.config.settings import settings
+from app.infrastructure.llm import get_chat_model
 from app.tools.tools import TRAVEL_TOOLS
 
 
 EXECUTOR_SYSTEM = """
 You are an execution agent for a travel assistant.
-
-You will be given:
 - the conversation so far (messages)
 - a plan (list of steps)
 
@@ -95,7 +92,7 @@ Do not show the plan unless the user asked for it.
 
 # Single cached agent instance
 _AGENT = create_agent(
-    model=settings.get_chat_model(temperature=0.2),
+    model=get_chat_model(),
     tools=TRAVEL_TOOLS,
     system_prompt=EXECUTOR_SYSTEM,
 )

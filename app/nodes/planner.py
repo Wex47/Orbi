@@ -1,6 +1,5 @@
 from __future__ import annotations
-
-from app.config.settings import settings
+from app.infrastructure.llm import get_chat_model
 
 
 PLANNER_SYSTEM = """
@@ -31,7 +30,7 @@ def _parse_numbered_list(text: str) -> list[str]:
 
 
 def planner_node(state: dict) -> dict:
-    model = settings.get_chat_model()
+    model = get_chat_model()
     messages = [{"role": "system", "content": PLANNER_SYSTEM}] + state["messages"]
     plan_text = model.invoke(messages).content
     plan = _parse_numbered_list(plan_text)
