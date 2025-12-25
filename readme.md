@@ -161,39 +161,6 @@ Hallucination mitigation is handled at multiple layers:
 
 This separation improves reliability and debuggability.
 
----
-
-## 📊 How This Meets the Evaluation Criteria
-
-### 1️⃣ Conversation Quality
-
-- Multi-turn context is preserved using a graph-based state
-- Clarifying questions are asked only when necessary
-- Responses prioritize clarity and usefulness through carefully crafted system prompts
-
-### 2️⃣ Hallucination Handling
-
-- Explicit tool-vs-LLM decision logic (e.g., “Is factual information required?”)
-- Verification step executed after response generation
-- Transparency notes added when responses are not grounded in external data
-- Low model temperature (0.2 as default) to reduce variance and hallucinations (configurable)
-
-### 3️⃣ Context Management
-
-* Conversation history is preserved **per session**, both explicitly (via the message list) and implicitly (using an in-memory checkpointer)
-* Follow-up questions correctly reference and build upon prior turns in the conversation
-* In testing, the LLM demonstrated effective use of conversational context; for example, after asking *“What is the time in China?”* and encountering a network error, a subsequent *“Try again”* prompt was correctly interpreted as referring to China, and the request was reissued accordingly
-
-
-### 4️⃣ External Data Integration
-
-- Tools are invoked **only when appropriate**, based on explicit tool descriptions and clear detection of factual information requirements
-- The system integrates **multiple external APIs**: six APIs across three providers (Open-Meteo, Amadeus, and WorldTimeAPI)
-- Retrieved external data is **explicitly injected into the LLM prompts** rather than implicitly assumed
-- The system avoids **silent blending of factual data and model assumptions**, preserving transparency and accuracy
-
----
-
 ## 🧑‍💻 Interface
 
 - **CLI-based interface** (required by assignment)
