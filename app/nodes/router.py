@@ -59,8 +59,14 @@ Return ONLY one word: OFF_TOPIC, DIRECT, or PLAN.
 
 def router_node(state: dict) -> dict:
     model = get_lightweight_chat_model()
-    messages = [{"role": "system", "content": ROUTER_SYSTEM}] + state["messages"]
 
+    last_message = state["messages"][-1]
+    if isinstance(last_message, dict):
+        query = last_message.get("content", "")
+    else:
+        query = getattr(last_message, "content", "")
+
+    messages = [{"role": "system", "content": ROUTER_SYSTEM}] + state["messages"]
     out = model.invoke(messages).content.strip().upper()
 
     if out.startswith("OFF_TOPIC"):
@@ -70,8 +76,30 @@ def router_node(state: dict) -> dict:
     elif out.startswith("DIRECT"):
         route = "DIRECT"
     else:
-        # Defensive fallback: prefer safety over under-handling
         route = "PLAN"
 
-    return {"route": route}
+    return {
+        "route": route,
+        "query": query,
+    }
+
+
+# def router_node(state: dict) -> dict:
+#     model = get_lightweight_chat_model()
+#     state["query"] = state["messages"][-1]
+#     messages = [{"role": "system", "content": ROUTER_SYSTEM}] + state["messages"]
+
+#     out = model.invoke(messages).content.strip().upper()
+
+#     if out.startswith("OFF_TOPIC"):
+#         route = "OFF_TOPIC"
+#     elif out.startswith("PLAN"):
+#         route = "PLAN"
+#     elif out.startswith("DIRECT"):
+#         route = "DIRECT"
+#     else:
+#         # Defensive fallback: prefer safety over under-handling
+#         route = "PLAN"
+
+#     return {"route": route}
 

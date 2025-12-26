@@ -26,12 +26,12 @@ INVALID: <one short reason>
 def verifier_node(state: dict) -> dict:
     model = get_verifier_model()
 
-    plan = state.get("plan") or []
+    plan = state.get("query") or []
     execution = state.get("execution") or ""
 
     verifier_prompt = (
         "Verify the following.\n\n"
-        f"Plan:\n{plan}\n\n"
+        f"query:\n{plan}\n\n"
         f"Proposed answer:\n{execution}\n"
     )
 

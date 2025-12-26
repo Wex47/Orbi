@@ -11,8 +11,8 @@ class State(TypedDict):
     messages: Annotated[list, add_messages]
 
     # Routing + workflow artifacts
-    route: Optional[Literal["DIRECT", "PLAN"]]
-    plan: Optional[list[str]]
+    route: Optional[Literal["DIRECT", "PLAN", "OFF_TOPIC"]]
+    query: Optional[str]
     execution: Optional[str]
     tools_used: bool
     verified: Optional[bool]
