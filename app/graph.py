@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from langgraph.graph import StateGraph, START, END
-# from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.checkpoint.memory import InMemorySaver
 
 from app.config.state import State
 from app.nodes.router import router_node
@@ -51,5 +51,5 @@ def build_graph():
     builder.add_edge("finalizer", END)
 
     # Memory: checkpointer persists state per thread_id :contentReference[oaicite:5]{index=5}
-    # checkpointer = InMemorySaver()
-    return builder.compile()
+    checkpointer = InMemorySaver()
+    return builder.compile(checkpointer=checkpointer)

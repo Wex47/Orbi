@@ -86,7 +86,8 @@ Do not expose your internal chain-of-thought.
 
 from langchain.agents import create_agent
 from langchain_core.messages import ToolMessage
-from app.infrastructure.llm import get_chat_model
+# from app.infrastructure.llm import get_chat_model
+from app.infrastructure.llm import get_lightweight_chat_model
 from app.tools.tools import TRAVEL_TOOLS
 
 
@@ -95,7 +96,8 @@ from app.tools.tools import TRAVEL_TOOLS
 # ------------------------------------------------------------------
 
 _AGENT = create_agent(
-    model=get_chat_model(),
+    # model=get_chat_model(),
+    model=get_lightweight_chat_model(),
     tools=TRAVEL_TOOLS,
     system_prompt=EXECUTOR_SYSTEM,
 )
