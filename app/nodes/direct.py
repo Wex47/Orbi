@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.infrastructure.llm import get_chat_model
+from app.infrastructure.llm import get_lightweight_chat_model
 
 DIRECT_SYSTEM = """
 You are a professional travel assistant.
@@ -13,7 +13,7 @@ Special rule:
 
 
 def direct_node(state: dict) -> dict:
-    model = get_chat_model()
+    model = get_lightweight_chat_model()
     messages = [{"role": "system", "content": DIRECT_SYSTEM}] + state["messages"]
     answer = model.invoke(messages).content
 

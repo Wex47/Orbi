@@ -6,7 +6,7 @@ from langgraph.graph import StateGraph, START, END
 from app.config.state import State
 from app.nodes.router import router_node
 from app.nodes.direct import direct_node
-from app.nodes.planner import planner_node
+# from app.nodes.planner import planner_node
 from app.nodes.executor import executor_node
 from app.nodes.verifier import verifier_node
 from app.nodes.finalizer import finalizer_node
@@ -19,7 +19,7 @@ def build_graph():
     builder.add_node("router", router_node)
     builder.add_node("direct", direct_node)
     builder.add_node("off_topic", off_topic_node)
-    builder.add_node("planner", planner_node)
+    # builder.add_node("planner", planner_node)
     builder.add_node("executor", executor_node)
     builder.add_node("verifier", verifier_node)
     builder.add_node("finalizer", finalizer_node)
@@ -27,14 +27,15 @@ def build_graph():
     builder.add_edge(START, "router")
 
     def route_after_router(state: State) -> str:
-        return state["route"] or "DIRECT"
+        return state["route"] or "PLAN"
 
     builder.add_conditional_edges(
         "router",
         route_after_router,
         {
             "DIRECT": "direct",
-            "PLAN": "planner",
+            # "PLAN": "planner",
+            "PLAN": "executor",
             "OFF_TOPIC": "off_topic"
         },
     )
@@ -43,7 +44,7 @@ def build_graph():
 
     builder.add_edge("direct", "finalizer")
 
-    builder.add_edge("planner", "executor")
+    # builder.add_edge("planner", "executor")
     builder.add_edge("executor", "verifier")
     builder.add_edge("verifier", "finalizer")
 
