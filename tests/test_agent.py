@@ -11,3 +11,4 @@ def test_agent_uses_climate_tool(agent_executor):
     print(response)
     print(tool_names)
     assert "get_place_climate" in tool_names
+

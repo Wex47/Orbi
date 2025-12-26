@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from app.infrastructure.llm import get_verifier_model
+from app.infrastructure.llm import get_lightweight_chat_model
 
 
 VERIFIER_SYSTEM = """
@@ -24,7 +25,8 @@ INVALID: <one short reason>
 
 
 def verifier_node(state: dict) -> dict:
-    model = get_verifier_model()
+    # model = get_verifier_model()
+    model = get_lightweight_chat_model()
 
     query = state.get("query") or []
     execution = state.get("execution") or ""

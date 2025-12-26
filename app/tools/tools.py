@@ -2,6 +2,7 @@ from langchain.tools import tool
 from app.domain.climate import fetch_climate_data
 from datetime import date
 from typing import Optional
+from datetime import datetime
 from app.domain.travel_recommendations import (
     get_travel_recommendations,
 )
@@ -82,13 +83,8 @@ from app.domain.timezone_service import get_current_time_by_timezone
 def get_current_time(timezone: str) -> dict:
     """
     Retrieve the current local time and timezone metadata using a real-time API.
+    ALWAYS use this tool to get date or time in a SPECIFIED place or timezone in the world.
 
-    IMPORTANT:
-    - This tool PROVIDES real-time information.
-    - Use this tool whenever the user asks for the current time, date,
-      or timezone information for any location.
-    - Do NOT answer such questions without calling this tool.
-    - Do NOT state that you lack real-time access if this tool is available.
 
     Input:
         timezone (str): Timezone in Area/Location or Area/Location/Region format.
@@ -118,6 +114,13 @@ def get_current_time(timezone: str) -> dict:
     return get_current_time_by_timezone(timezone)
 
 
+@tool
+def get_current_local_datetime() -> str:
+    """
+    Returns the current date and time at the moment of invocation.
+    USE THIS TOOL FOR ANY FOR ANY QUESTION ABOUT TODAY'S DATE.
+    """
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 #########################################
@@ -126,5 +129,6 @@ TRAVEL_TOOLS = [
     get_place_climate,
     travel_recommendations_tool,
     search_flights_tool,
-    get_current_time
+    get_current_time,
+    get_current_local_datetime
 ]
