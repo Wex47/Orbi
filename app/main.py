@@ -12,6 +12,12 @@ load_dotenv()
 def main():
     graph = build_graph()
 
+    # added for debugging
+    png_bytes = graph.get_graph().draw_mermaid_png()
+    with open("langgraph.png", "wb") as f:
+        f.write(png_bytes)
+
+
     # One thread per conversation session. Reuse this value to keep memory.
     thread_id = os.getenv("THREAD_ID") or str(uuid.uuid4())
     print(f"[thread_id={thread_id}] (set THREAD_ID env var to resume)")
@@ -36,3 +42,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# assuming you have: graph = StateGraph(...).compile()
+

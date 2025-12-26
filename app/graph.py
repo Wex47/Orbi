@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from langgraph.graph import StateGraph, START, END
-from langgraph.checkpoint.memory import InMemorySaver
+# from langgraph.checkpoint.memory import InMemorySaver
 
 from app.config.state import State
 from app.nodes.router import router_node
@@ -10,6 +10,7 @@ from app.nodes.planner import planner_node
 from app.nodes.executor import executor_node
 from app.nodes.verifier import verifier_node
 from app.nodes.finalizer import finalizer_node
+from app.nodes.off_topic import off_topic_node
 
 
 def build_graph():
@@ -17,6 +18,7 @@ def build_graph():
 
     builder.add_node("router", router_node)
     builder.add_node("direct", direct_node)
+    builder.add_node("off_topic", off_topic_node)
     builder.add_node("planner", planner_node)
     builder.add_node("executor", executor_node)
     builder.add_node("verifier", verifier_node)
@@ -33,8 +35,11 @@ def build_graph():
         {
             "DIRECT": "direct",
             "PLAN": "planner",
+            "OFF_TOPIC": "off_topic"
         },
     )
+
+    builder.add_edge("off_topic", "finalizer")
 
     builder.add_edge("direct", "finalizer")
 
@@ -45,5 +50,5 @@ def build_graph():
     builder.add_edge("finalizer", END)
 
     # Memory: checkpointer persists state per thread_id :contentReference[oaicite:5]{index=5}
-    checkpointer = InMemorySaver()
-    return builder.compile(checkpointer=checkpointer)
+    # checkpointer = InMemorySaver()
+    return builder.compile()
