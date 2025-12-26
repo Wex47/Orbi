@@ -1,8 +1,10 @@
+from typing import List
 from langchain.tools import tool
 from app.domain.climate import fetch_climate_data
 from datetime import date
 from typing import Optional
 from datetime import datetime
+from app.domain.travel_warnings import fetch_travel_warnings
 from app.domain.travel_recommendations import (
     get_travel_recommendations,
 )
@@ -123,6 +125,24 @@ def get_current_local_datetime() -> str:
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
+@tool
+def get_travel_warnings(country: str) -> List[str]:
+    """
+    Returns official Israeli travel warning recommendations for a given country.
+
+    Input:
+    - country: English country name (e.g., "Italy", "Japan", "United States")
+
+    Output:
+    - A list of travel warning recommendation strings.
+      Returns an empty list if the country is unsupported or no warnings exist.
+    """
+    recommendations = fetch_travel_warnings(country)
+
+    # Convert set → list for JSON / tool compatibility
+    return sorted(recommendations)
+
+
 #########################################
 
 TRAVEL_TOOLS = [
@@ -130,5 +150,6 @@ TRAVEL_TOOLS = [
     travel_recommendations_tool,
     search_flights_tool,
     get_current_time,
-    get_current_local_datetime
+    get_current_local_datetime,
+    get_travel_warnings
 ]

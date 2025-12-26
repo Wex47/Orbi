@@ -1,0 +1,135 @@
+# import sys
+# import pprint
+# sys.stdout.reconfigure(encoding="utf-8")
+# import json
+# import requests
+
+# DATASET_URL = "https://data.gov.il/api/3/action/datastore_search"
+# RESOURCE_ID = "2a01d234-b2b0-4d46-baa0-cec05c401e7d"
+# DATASET_LIMIT = 32000
+
+# with open("country_en_to_he.json", encoding="utf-8") as f:
+#     COUNTRY_EN_TO_HE = json.load(f)
+
+
+# def fetch_travel_warnings() -> list[dict]:
+#     response = requests.get(
+#         DATASET_URL,
+#         params={
+#             "resource_id": RESOURCE_ID,
+#             "limit": DATASET_LIMIT,
+#         },
+#         timeout=15,
+#     )
+#     response.raise_for_status()
+#     return response.json()["result"]["records"]
+
+
+# RECORDS = fetch_travel_warnings()
+
+
+# def fetch_travel_warnings(country_en: str) -> set[str]:
+#     hebrew = COUNTRY_EN_TO_HE.get(country_en.strip().lower())
+#     if not hebrew:
+#         return set()
+
+#     return {
+#         r["recommendations"]
+#         for r in RECORDS
+#         if r.get("country") == hebrew and r.get("recommendations")
+#     }
+
+
+import json
+import requests
+from pathlib import Path
+from datetime import datetime, timedelta
+import sys
+import pprint
+sys.stdout.reconfigure(encoding="utf-8")
+# import json
+
+# ---------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------
+DATASET_URL = "https://data.gov.il/api/3/action/datastore_search"
+RESOURCE_ID = "2a01d234-b2b0-4d46-baa0-cec05c401e7d"
+DATASET_LIMIT = 32000
+
+CACHE_FILE = Path("travel_warnings_cache.json")
+CACHE_TTL = timedelta(days=1)
+
+# ---------------------------------------------------------------------
+# Load English -> Hebrew country mapping
+# ---------------------------------------------------------------------
+with open("country_en_to_he.json", encoding="utf-8") as f:
+    COUNTRY_EN_TO_HE = json.load(f)
+
+# ---------------------------------------------------------------------
+# Cache helpers
+# ---------------------------------------------------------------------
+def is_cache_fresh(path: Path, ttl: timedelta) -> bool:
+    if not path.exists():
+        return False
+    modified_time = datetime.fromtimestamp(path.stat().st_mtime)
+    return datetime.now() - modified_time < ttl
+
+# ---------------------------------------------------------------------
+# Fetch from API
+# ---------------------------------------------------------------------
+def fetch_travel_warnings_from_api() -> list[dict]:
+    response = requests.get(
+        DATASET_URL,
+        params={
+            "resource_id": RESOURCE_ID,
+            "limit": DATASET_LIMIT,
+        },
+        timeout=15,
+    )
+    response.raise_for_status()
+    return response.json()["result"]["records"]
+
+# ---------------------------------------------------------------------
+# Load records with daily cache + fallback
+# ---------------------------------------------------------------------
+def load_travel_warnings() -> list[dict]:
+    # Fresh cache → use it
+    if is_cache_fresh(CACHE_FILE, CACHE_TTL):
+        with CACHE_FILE.open(encoding="utf-8") as f:
+            return json.load(f)
+
+    # Cache missing or stale → try API
+    try:
+        records = fetch_travel_warnings_from_api()
+        with CACHE_FILE.open("w", encoding="utf-8") as f:
+            json.dump(records, f, ensure_ascii=False)
+        return records
+
+    # API failed → fallback to any existing cache
+    except Exception:
+        if CACHE_FILE.exists():
+            with CACHE_FILE.open(encoding="utf-8") as f:
+                return json.load(f)
+        raise  # no cache and no API → hard fail
+
+# ---------------------------------------------------------------------
+# Load records once (cached)
+# ---------------------------------------------------------------------
+RECORDS = load_travel_warnings()
+
+# ---------------------------------------------------------------------
+# Public API: recommendations only
+# ---------------------------------------------------------------------
+def fetch_travel_warnings(country_en: str) -> set[str]:
+    hebrew = COUNTRY_EN_TO_HE.get(country_en.strip().lower())
+    if not hebrew:
+        return set()
+
+    return {
+        r["recommendations"]
+        for r in RECORDS
+        if r.get("country") == hebrew and r.get("recommendations")
+    }
+
+
+# print(fetch_travel_warnings("Italy"))
