@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 
-from app.domain.recommendations.travel_recommendations import (
+from app.domain.travel_recommendations import (
     create_travel_recommendations_tool,
 )
 

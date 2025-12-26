@@ -3,6 +3,32 @@ from datetime import datetime
 from collections import defaultdict
 from typing import Union
 
+# first function
+def geocode_place(place_name: str) -> dict:
+    url = "https://geocoding-api.open-meteo.com/v1/search"
+    params = {
+        "name": place_name,
+        "count": 1,
+        "language": "en",
+        "format": "json"
+    }
+
+    response = requests.get(url, params=params, timeout=10)
+    response.raise_for_status()
+    data = response.json()
+
+    if not data.get("results"):
+        raise ValueError(f"No coordinates found for '{place_name}'.")
+
+    r = data["results"][0]
+
+    return {
+        "name": r["name"],
+        "country": r.get("country", "Unknown"),
+        "latitude": r["latitude"],
+        "longitude": r["longitude"],
+    }
+
 MONTHS = {
     "january": 1, "february": 2, "march": 3, "april": 4,
     "may": 5, "june": 6, "july": 7, "august": 8,
@@ -11,7 +37,7 @@ MONTHS = {
 
 MONTHS_NUM_TO_NAME = {v: k for k, v in MONTHS.items()}
 
-
+# second function
 def get_monthly_climate_by_coords(
     latitude: float,
     longitude: float,
@@ -81,3 +107,22 @@ def get_monthly_climate_by_coords(
         "average_temperature_c": avg_temp,
         "average_precipitation_mm": avg_rain,
     }
+
+
+def fetch_climate_data(place_name: str, month: str):
+    try:
+        coords = geocode_place(place_name)
+        climate = get_monthly_climate_by_coords(
+            coords["latitude"],
+            coords["longitude"],
+            month
+        )
+
+        return (
+            f"{coords['name']}, {coords['country']} in {month.capitalize()}:\n"
+            f"- Avg temperature: {climate['average_temperature_c']}°C\n"
+            f"- Precipitation: {climate['average_precipitation_mm']} mm"
+        )
+
+    except Exception as e:
+        return str(e)

@@ -1,7 +1,7 @@
 import pytest
 
 from app.domain.climate.geo import geocode_place
-from app.domain.climate.climate import get_monthly_climate_by_coords
+from app.domain.climate import get_monthly_climate_by_coords
 from app.tools.tools import get_place_climate
 
 

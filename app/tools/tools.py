@@ -1,39 +1,27 @@
 from langchain.tools import tool
-from app.domain.climate.geo import geocode_place
-from app.domain.climate.climate import get_monthly_climate_by_coords
+from app.domain.climate import fetch_climate_data
 from datetime import date
 from typing import Optional
-from app.domain.recommendations.travel_recommendations import (
+from app.domain.travel_recommendations import (
     get_travel_recommendations,
 )
 
 @tool
 def get_place_climate(place_name: str, month: str) -> str:
     """
-    Get historical climate details for a place and month.
+    Returns historical climate averages for a given place and month.
+
+    The tool resolves the place name to geographic coordinates, retrieves
+    historical monthly climate data, and summarizes key metrics such as
+    average temperature and precipitation. Use this tool when factual
+    climate data is required to support travel or seasonal decisions.
     """
-
-    try:
-        coords = geocode_place(place_name)
-        climate = get_monthly_climate_by_coords(
-            coords["latitude"],
-            coords["longitude"],
-            month
-        )
-
-        return (
-            f"{coords['name']}, {coords['country']} in {month.capitalize()}:\n"
-            f"- Avg temperature: {climate['average_temperature_c']}°C\n"
-            f"- Precipitation: {climate['average_precipitation_mm']} mm"
-        )
-
-    except Exception as e:
-        return str(e)
+    return fetch_climate_data(place_name=place_name,month=month)
 
 
 ########################################
 
-from app.domain.flights.flight_search import search_flights
+from app.domain.flight_search import search_flights
 
 @tool
 def search_flights_tool(
@@ -88,7 +76,7 @@ def travel_recommendations_tool(
 ########################################
 
 
-from app.domain.time.timezone_service import get_current_time_by_timezone
+from app.domain.timezone_service import get_current_time_by_timezone
 
 @tool
 def get_current_time(timezone: str) -> dict:

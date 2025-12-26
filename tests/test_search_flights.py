@@ -4,7 +4,7 @@ from pprint import pprint
 
 from app.infrastructure.amadeus_auth import AmadeusAuth
 from app.infrastructure.amadeus_client_impl import AmadeusClient
-from app.domain.flights.flight_search import search_flights
+from app.domain.flight_search import search_flights
 
 load_dotenv()
 

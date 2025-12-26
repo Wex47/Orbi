@@ -8,7 +8,7 @@ You are a verification agent.
 
 Check whether the proposed answer is sensible and consistent with:
 - the conversation
-- the plan
+- the query
 - any tool-derived facts (if mentioned)
 
 Rules:
@@ -26,12 +26,12 @@ INVALID: <one short reason>
 def verifier_node(state: dict) -> dict:
     model = get_verifier_model()
 
-    plan = state.get("query") or []
+    query = state.get("query") or []
     execution = state.get("execution") or ""
 
     verifier_prompt = (
         "Verify the following.\n\n"
-        f"query:\n{plan}\n\n"
+        f"query:\n{query}\n\n"
         f"Proposed answer:\n{execution}\n"
     )
 
