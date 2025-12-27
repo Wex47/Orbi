@@ -3,7 +3,7 @@ import requests
 from pathlib import Path
 from datetime import datetime, timedelta
 import sys
-import pprint
+from app.config.settings import settings
 sys.stdout.reconfigure(encoding="utf-8")
 
 # ---------------------------------------------------------------------
@@ -13,13 +13,14 @@ DATASET_URL = "https://data.gov.il/api/3/action/datastore_search"
 RESOURCE_ID = "2a01d234-b2b0-4d46-baa0-cec05c401e7d"
 DATASET_LIMIT = 32000
 
-CACHE_FILE = Path("travel_warnings_cache.json")
+CACHE_FILE = settings.CACHE_DIR / "travel_warnings_cache.json"
+BASE_FILE = settings.DATA_DIR / "country_en_to_he.json"
 CACHE_TTL = timedelta(days=1)
 
 # ---------------------------------------------------------------------
 # Load English -> Hebrew country mapping
 # ---------------------------------------------------------------------
-with open("country_en_to_he.json", encoding="utf-8") as f:
+with open(BASE_FILE, encoding="utf-8") as f:
     COUNTRY_EN_TO_HE = json.load(f)
 
 # ---------------------------------------------------------------------
@@ -91,3 +92,5 @@ def fetch_travel_warnings(country_en: str) -> set[str]:
         for r in RECORDS
         if r.get("country") == hebrew and r.get("recommendations")
     }
+
+print(fetch_travel_warnings("Italy"))

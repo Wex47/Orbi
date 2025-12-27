@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     # --------------------
     
     PROJECT_ROOT: Path = Path(__file__).resolve().parents[2]
+    DATA_DIR: Path = PROJECT_ROOT / "app" / "data"
     CACHE_DIR: Path = PROJECT_ROOT / "app" / "cache"
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
