@@ -47,16 +47,15 @@
 from __future__ import annotations
 import uuid
 from langgraph.checkpoint.postgres import PostgresSaver
+from app.config.settings import settings
 from app.graph import build_graph
-
-DB_URI = "postgresql://langgraph:langgraph@localhost:5432/langgraph"
 
 
 def main():
 
     thread_id = "1"  # fixed for testing
 
-    with PostgresSaver.from_conn_string(DB_URI) as checkpointer:
+    with PostgresSaver.from_conn_string(settings.postgres_dsn) as checkpointer:
 
         checkpointer.setup() # create the tables if they dont exist
         graph = build_graph(checkpointer)

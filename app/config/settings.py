@@ -177,6 +177,7 @@
 
 from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field
 from dotenv import load_dotenv
 import os
 
@@ -237,9 +238,23 @@ class Settings(BaseSettings):
     # Database (Memory backup)
     # -----------------------
 
-    
+    postgres_host: str = Field(..., alias="POSTGRES_HOST")
+    postgres_port: int = Field(..., alias="POSTGRES_PORT")
+    postgres_user: str = Field(..., alias="POSTGRES_USER")
+    postgres_password: str = Field(..., alias="POSTGRES_PASSWORD")
+    postgres_db: str = Field(..., alias="POSTGRES_DB")
 
-
+    @property
+    def postgres_dsn(self) -> str:
+        """
+        Build a PostgreSQL DSN from structured settings.
+        """
+        return (
+            f"postgresql://"
+            f"{self.postgres_user}:{self.postgres_password}"
+            f"@{self.postgres_host}:{self.postgres_port}"
+            f"/{self.postgres_db}"
+        )
 
 # --------------------
 # Instantiate settings
