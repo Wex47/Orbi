@@ -223,6 +223,11 @@ class Settings(BaseSettings):
     # --------------------
     OPEN_METEO_BASE_URL: str = "https://api.open-meteo.com"
 
+    #
+    # RAPID API
+    #
+    RAPIDAPI_KEY: str
+
     # --------------------
     # HTTP
     # --------------------

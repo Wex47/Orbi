@@ -1,13 +1,11 @@
-from typing import List
+from typing import List, Optional, Dict, Any
 from langchain.tools import tool
 from app.domain.climate import fetch_climate_data
 from datetime import date
-from typing import Optional
 from datetime import datetime
 from app.domain.travel_warnings import fetch_travel_warnings
-from app.domain.travel_recommendations import (
-    get_travel_recommendations,
-)
+from app.domain.travel_recommendations import get_travel_recommendations
+from app.domain.entry_requirements import get_visa_requirements
 
 @tool
 def get_place_climate(place_name: str, month: str) -> str:
@@ -143,6 +141,30 @@ def get_travel_warnings(country: str) -> List[str]:
     return sorted(recommendations)
 
 
+@tool
+def get_entry_requirements(
+    passport_country_code: str,
+    destination_country_code: str,
+) -> Dict[str, Any]:
+    """
+    Return visa and entry requirements for travel between two countries.
+
+    Inputs:
+    - passport_country_code: ISO 3166-1 alpha-2 code of the passport country (e.g. "US", "CN")
+    - destination_country_code: ISO 3166-1 alpha-2 code of the destination country
+
+    Output includes:
+    - visa type and duration (e.g. visa-free, visa on arrival, eVisa)
+    - mandatory entry or registration requirements (if any)
+
+    Information is best-effort and may change; users must verify with official sources.
+    """
+    return get_visa_requirements(
+        passport_country_code=passport_country_code,
+        destination_country_code=destination_country_code,
+    )
+
+
 #########################################
 
 TRAVEL_TOOLS = [
@@ -151,5 +173,6 @@ TRAVEL_TOOLS = [
     search_flights_tool,
     get_current_time,
     get_current_local_datetime,
-    get_travel_warnings
+    get_travel_warnings,
+    get_entry_requirements
 ]
