@@ -40,6 +40,13 @@ class Settings(BaseSettings):
     VERIFIER_MODEL_NAME: str = "gemini-2.5-flash"
     VERIFIER_TEMP: float = 0.0
 
+    # ------------------------
+    # Summarize parameters 
+    # ------------------------
+    MAX_SUMMARY_INPUT_TOKENS: int  = 6000
+    SUMMARY_TOKENS_THRESHOLD: int = 4000
+    MAX_SUMMARY_OUTPUT_TOKENS: int = 256
+
     # --------------------
     # API Keys
     # --------------------

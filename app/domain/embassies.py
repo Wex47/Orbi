@@ -139,26 +139,26 @@ def get_israeli_embassies(
 
 #############################
 
-import pprint 
+# import pprint 
 
-print("\n=== ISRAELI EMBASSIES DOMAIN SMOKE TEST ===\n")
+# print("\n=== ISRAELI EMBASSIES DOMAIN SMOKE TEST ===\n")
 
-# 1️⃣ Full dataset (cached or fetched)
-all_embassies = get_israeli_embassies()
+# # 1️⃣ Full dataset (cached or fetched)
+# all_embassies = get_israeli_embassies()
 
-print(f"Total embassies fetched: {len(all_embassies)}")
+# print(f"Total embassies fetched: {len(all_embassies)}")
 
-if not all_embassies:
-    raise RuntimeError("No embassy data returned")
+# if not all_embassies:
+#     raise RuntimeError("No embassy data returned")
 
-print("\nSample entry:\n")
-print(json.dumps(all_embassies[0], indent=2, ensure_ascii=False))
+# print("\nSample entry:\n")
+# print(json.dumps(all_embassies[0], indent=2, ensure_ascii=False))
 
-# 2️⃣ Filter by country
-country = "United States of America"
-us_embassies = get_israeli_embassies(country=country)
+# # 2️⃣ Filter by country
+# country = "United States of America"
+# us_embassies = get_israeli_embassies(country=country)
 
-print(f"\nEmbassies in {country}: {len(us_embassies)}")
+# print(f"\nEmbassies in {country}: {len(us_embassies)}")
 
-for e in us_embassies[:1]:
-    pprint.pprint(e)
+# for e in us_embassies[:1]:
+#     pprint.pprint(e)

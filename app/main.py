@@ -60,6 +60,12 @@ def main():
         checkpointer.setup() # create the tables if they dont exist
         graph = build_graph(checkpointer)
 
+        # added for debugging
+        png_bytes = graph.get_graph().draw_mermaid_png()
+        with open("langgraph.png", "wb") as f:
+            f.write(png_bytes)
+
+
         print(f"[thread_id={thread_id}]")
 
         while True:

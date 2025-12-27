@@ -92,5 +92,3 @@ def fetch_travel_warnings(country_en: str) -> set[str]:
         for r in RECORDS
         if r.get("country") == hebrew and r.get("recommendations")
     }
-
-print(fetch_travel_warnings("Italy"))
