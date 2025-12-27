@@ -6,6 +6,7 @@ from datetime import datetime
 from app.domain.travel_warnings import fetch_travel_warnings
 from app.domain.travel_recommendations import get_travel_recommendations
 from app.domain.entry_requirements import get_visa_requirements
+from app.domain.embassies import get_israeli_embassies
 
 @tool
 def get_place_climate(place_name: str, month: str) -> str:
@@ -165,6 +166,19 @@ def get_entry_requirements(
     )
 
 
+
+@tool
+def get_israeli_embassy_contacts(
+    country: Optional[str] = None,
+) -> List[Dict[str, str]]:
+    """
+    Return contact details for Israeli embassies and consulates.
+    Optionally filter by country name.
+    if the country name didn't work - try again with alternative name.
+    """
+    return get_israeli_embassies(country=country)
+
+
 #########################################
 
 TRAVEL_TOOLS = [
@@ -174,5 +188,6 @@ TRAVEL_TOOLS = [
     get_current_time,
     get_current_local_datetime,
     get_travel_warnings,
-    get_entry_requirements
+    get_entry_requirements,
+    get_israeli_embassy_contacts
 ]
