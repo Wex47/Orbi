@@ -1,45 +1,3 @@
-# import sys
-# import pprint
-# sys.stdout.reconfigure(encoding="utf-8")
-# import json
-# import requests
-
-# DATASET_URL = "https://data.gov.il/api/3/action/datastore_search"
-# RESOURCE_ID = "2a01d234-b2b0-4d46-baa0-cec05c401e7d"
-# DATASET_LIMIT = 32000
-
-# with open("country_en_to_he.json", encoding="utf-8") as f:
-#     COUNTRY_EN_TO_HE = json.load(f)
-
-
-# def fetch_travel_warnings() -> list[dict]:
-#     response = requests.get(
-#         DATASET_URL,
-#         params={
-#             "resource_id": RESOURCE_ID,
-#             "limit": DATASET_LIMIT,
-#         },
-#         timeout=15,
-#     )
-#     response.raise_for_status()
-#     return response.json()["result"]["records"]
-
-
-# RECORDS = fetch_travel_warnings()
-
-
-# def fetch_travel_warnings(country_en: str) -> set[str]:
-#     hebrew = COUNTRY_EN_TO_HE.get(country_en.strip().lower())
-#     if not hebrew:
-#         return set()
-
-#     return {
-#         r["recommendations"]
-#         for r in RECORDS
-#         if r.get("country") == hebrew and r.get("recommendations")
-#     }
-
-
 import json
 import requests
 from pathlib import Path
@@ -47,7 +5,6 @@ from datetime import datetime, timedelta
 import sys
 import pprint
 sys.stdout.reconfigure(encoding="utf-8")
-# import json
 
 # ---------------------------------------------------------------------
 # Constants
@@ -121,7 +78,11 @@ RECORDS = load_travel_warnings()
 # Public API: recommendations only
 # ---------------------------------------------------------------------
 def fetch_travel_warnings(country_en: str) -> set[str]:
+
+    # 1. Fast deterministic path
     hebrew = COUNTRY_EN_TO_HE.get(country_en.strip().lower())
+
+    # 2. Fail safe
     if not hebrew:
         return set()
 
@@ -130,6 +91,3 @@ def fetch_travel_warnings(country_en: str) -> set[str]:
         for r in RECORDS
         if r.get("country") == hebrew and r.get("recommendations")
     }
-
-
-# print(fetch_travel_warnings("Italy"))

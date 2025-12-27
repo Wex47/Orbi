@@ -169,7 +169,7 @@
 "Comoros",
 "Congo",
 "Kosovo",
-"Costa rica',
+'Costa rica',
 'Korea',
 'North Korea',
 'Kazakhstan',
