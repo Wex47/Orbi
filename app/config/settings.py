@@ -233,6 +233,13 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    # -----------------------
+    # Database (Memory backup)
+    # -----------------------
+
+    
+
+
 
 # --------------------
 # Instantiate settings
