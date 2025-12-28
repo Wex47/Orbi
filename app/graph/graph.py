@@ -1,6 +1,6 @@
 from __future__ import annotations
 from langgraph.graph import StateGraph, START, END
-from app.config.state import State
+from app.graph.state import State
 from app.nodes.router import router_node
 from app.nodes.direct import direct_node
 from app.nodes.executor import executor_node

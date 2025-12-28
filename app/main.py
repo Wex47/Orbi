@@ -2,7 +2,7 @@ from __future__ import annotations
 import uuid
 from langgraph.checkpoint.postgres import PostgresSaver
 from app.config.settings import settings
-from app.graph import build_graph
+from app.graph.graph import build_graph
 from app.config.logger import setup_logging
 
 
