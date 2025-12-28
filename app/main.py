@@ -10,7 +10,7 @@ def main():
 
     # SETUP
     setup_logging()
-    thread_id = str(settings.THREAD_ID) or str(uuid.uuid4()) # if not set, generate a uuid
+    thread_id = settings.THREAD_ID or str(uuid.uuid4()) # if not set, generate a uuid
     settings.CACHE_DIR.mkdir(parents=True, exist_ok=True)
     #
 

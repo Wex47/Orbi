@@ -23,14 +23,28 @@ Do not expose your internal chain-of-thought.
 """.strip()
 
 # ------------------------------------------------------------------
-# ReAct-style unified executor
+# Lazy-initialized executor agent (cached)
 # ------------------------------------------------------------------
 
-_AGENT = create_agent(
-    model=get_lightweight_chat_model(),
-    tools=TRAVEL_TOOLS,
-    system_prompt=EXECUTOR_SYSTEM,
-)
+_AGENT = None
+
+def _get_agent():
+    """
+    Lazily create and cache the executor agent.
+    We use lazy initialization so the executor agent is created only at execution time, 
+    after configuration is finalized, avoiding import-time side effects while reusing a single, 
+    cached agent instance.
+    """
+    global _AGENT
+
+    if _AGENT is None:
+        _AGENT = create_agent(
+            model=get_lightweight_chat_model(),
+            tools=TRAVEL_TOOLS,
+            system_prompt=EXECUTOR_SYSTEM,
+        )
+
+    return _AGENT
 
 
 def executor_node(state: Dict[str, Any]) -> Dict[str, Any]:
@@ -43,7 +57,7 @@ def executor_node(state: Dict[str, Any]) -> Dict[str, Any]:
     """
 
     try:
-        result = _AGENT.invoke(
+        result = _get_agent().invoke(
         {
             "messages": state["messages"]
         }
