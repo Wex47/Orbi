@@ -10,11 +10,14 @@ from app.nodes.off_topic import off_topic_node
 from app.nodes.summarize import build_summarization_node
 
 
-
-def build_graph(checkpointer):
+def build_graph(checkpointer) -> StateGraph[State]:
+    """
+    Builds the main graph for the travel assistant application.
+    inputs: A checkpointer object for state persistence.
+    outputs: A compiled StateGraph instance.
+    """
 
     builder = StateGraph(State)
-
     builder.add_node("summarize", build_summarization_node())
     builder.add_node("router", router_node)
     builder.add_node("direct", direct_node)

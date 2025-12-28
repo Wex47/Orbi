@@ -1,10 +1,8 @@
-
 from typing import Optional
 from app.infrastructure.amadeus_auth import AmadeusAuth
 from app.infrastructure.amadeus_client_impl import AmadeusClient
 
 _amadeus_client: Optional[AmadeusClient] = None
-
 
 def get_amadeus_client() -> AmadeusClient:
     """

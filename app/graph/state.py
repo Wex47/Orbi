@@ -5,6 +5,10 @@ from typing_extensions import TypedDict
 from langgraph.graph.message import add_messages
 from langmem.short_term import RunningSummary
 
+"""
+Defines the state structure used throughout the graph nodes.
+"""
+
 class State(TypedDict):
     # Conversational memory (appended, not overwritten)
     messages: Annotated[list, add_messages]
@@ -14,6 +18,7 @@ class State(TypedDict):
 
     # Routing + workflow artifacts
     route: Optional[Literal["DIRECT", "PLAN", "OFF_TOPIC"]]
+
     query: Optional[str]
     execution: Optional[str]
     tools_used: bool

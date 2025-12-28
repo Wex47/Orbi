@@ -1,8 +1,11 @@
-# app/infrastructure/llm.py
-
 from typing import Dict, Tuple, Optional
 from langchain.chat_models import init_chat_model
 from app.config.settings import settings
+
+"""
+LLM cache and initialization functions.
+Provides functions to get cached instances of chat models used in various parts of the application.
+"""
 
 # ------------------------------------------------------------------
 # Model caches

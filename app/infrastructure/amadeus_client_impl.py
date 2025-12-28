@@ -1,9 +1,9 @@
 from typing import Dict, Any
 import requests
-
 from app.config.settings import settings
 from app.infrastructure.amadeus_auth import AmadeusAuth
 
+"""Client for interacting with the Amadeus API."""
 
 class AmadeusClient:
     def __init__(self, auth: AmadeusAuth):
