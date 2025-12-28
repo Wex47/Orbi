@@ -10,7 +10,7 @@ def main():
 
     # SETUP
     setup_logging()
-    thread_id = "1"  # fixed for testing
+    thread_id = str(settings.THREAD_ID) or str(uuid.uuid4()) # if not set, generate a uuid
     settings.CACHE_DIR.mkdir(parents=True, exist_ok=True)
     #
 
@@ -19,12 +19,7 @@ def main():
         checkpointer.setup() # create the tables if they dont exist
         graph = build_graph(checkpointer)
 
-        # added for debugging
-        png_bytes = graph.get_graph().draw_mermaid_png()
-        with open("langgraph.png", "wb") as f:
-            f.write(png_bytes)
-
-
+        print("Welcome to Orbi! Type 'exit' or 'quit' to leave.")
         print(f"[thread_id={thread_id}]")
 
         while True:

@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     # --------------------
     APP_NAME: str = "Orbi"
     ENV: str = "dev"
+    THREAD_ID: str = "1" # fixed for testing persistence. you can change to None to check non-persistence.
 
     # --------------------
     # Logging
