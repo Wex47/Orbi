@@ -1,5 +1,4 @@
 from __future__ import annotations
-import pprint
 
 def finalizer_node(state: dict) -> dict:
     execution = state.get("execution") or ""
@@ -24,8 +23,6 @@ def finalizer_node(state: dict) -> dict:
         final_answer = f"{execution}\n\n---\n{warning_block}"
     else:
         final_answer = execution
-
-    # pprint.pprint(state)
 
     return {
         "final_answer": final_answer,
