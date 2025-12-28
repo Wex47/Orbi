@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Annotated, Optional, Literal, Any
+from typing import Annotated, Literal, Any
 from typing_extensions import TypedDict
 from langgraph.graph.message import add_messages
 from langmem.short_term import RunningSummary

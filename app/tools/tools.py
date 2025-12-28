@@ -1,10 +1,12 @@
 from typing import List, Optional, Dict, Any
 from langchain.tools import tool
-from app.domain.climate import fetch_climate_data
 from datetime import date
 from datetime import datetime
+from app.domain.climate import fetch_climate_data
+from app.domain.flight_search import search_flights
 from app.domain.travel_warnings import fetch_travel_warnings
 from app.domain.travel_recommendations import get_travel_recommendations
+from app.domain.timezone_service import get_current_time_by_timezone
 from app.domain.entry_requirements import get_visa_requirements
 from app.domain.embassies import get_israeli_embassies
 
@@ -23,7 +25,6 @@ def get_place_climate(place_name: str, month: str) -> str:
 
 ########################################
 
-from app.domain.flight_search import search_flights
 
 @tool
 def search_flights_tool(
@@ -78,7 +79,6 @@ def travel_recommendations_tool(
 ########################################
 
 
-from app.domain.timezone_service import get_current_time_by_timezone
 
 @tool
 def get_current_time(timezone: str) -> dict:
@@ -164,7 +164,6 @@ def get_entry_requirements(
         passport_country_code=passport_country_code,
         destination_country_code=destination_country_code,
     )
-
 
 
 @tool
