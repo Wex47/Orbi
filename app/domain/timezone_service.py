@@ -1,5 +1,3 @@
-# app/domain/timezone_service.py
-
 from typing import Dict, Any
 import requests
 

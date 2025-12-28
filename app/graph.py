@@ -1,62 +1,4 @@
-# from __future__ import annotations
-
-# from langgraph.graph import StateGraph, START, END
-# from langgraph.checkpoint.memory import InMemorySaver
-
-# from app.config.state import State
-# from app.nodes.router import router_node
-# from app.nodes.direct import direct_node
-# # from app.nodes.planner import planner_node
-# from app.nodes.executor import executor_node
-# from app.nodes.verifier import verifier_node
-# from app.nodes.finalizer import finalizer_node
-# from app.nodes.off_topic import off_topic_node
-
-
-# def build_graph():
-#     builder = StateGraph(State)
-
-#     builder.add_node("router", router_node)
-#     builder.add_node("direct", direct_node)
-#     builder.add_node("off_topic", off_topic_node)
-#     # builder.add_node("planner", planner_node)
-#     builder.add_node("executor", executor_node)
-#     builder.add_node("verifier", verifier_node)
-#     builder.add_node("finalizer", finalizer_node)
-
-#     builder.add_edge(START, "router")
-
-#     def route_after_router(state: State) -> str:
-#         return state["route"] or "PLAN"
-
-#     builder.add_conditional_edges(
-#         "router",
-#         route_after_router,
-#         {
-#             "DIRECT": "direct",
-#             # "PLAN": "planner",
-#             "PLAN": "executor",
-#             "OFF_TOPIC": "off_topic"
-#         },
-#     )
-
-#     builder.add_edge("off_topic", "finalizer")
-
-#     builder.add_edge("direct", "finalizer")
-
-#     # builder.add_edge("planner", "executor")
-#     builder.add_edge("executor", "verifier")
-#     builder.add_edge("verifier", "finalizer")
-
-#     builder.add_edge("finalizer", END)
-
-#     # Memory: checkpointer persists state per thread_id :contentReference[oaicite:5]{index=5}
-#     checkpointer = InMemorySaver()
-#     return builder.compile(checkpointer=checkpointer)
-
-
 from __future__ import annotations
-
 from langgraph.graph import StateGraph, START, END
 from app.config.state import State
 from app.nodes.router import router_node
@@ -65,10 +7,7 @@ from app.nodes.executor import executor_node
 from app.nodes.verifier import verifier_node
 from app.nodes.finalizer import finalizer_node
 from app.nodes.off_topic import off_topic_node
-
 from app.nodes.summarize import build_summarization_node
-
-
 
 def build_graph(checkpointer):
     builder = StateGraph(State)

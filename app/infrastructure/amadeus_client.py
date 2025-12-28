@@ -1,4 +1,3 @@
-# app/infrastructure/amadeus_client.py
 
 from typing import Optional
 from app.infrastructure.amadeus_auth import AmadeusAuth

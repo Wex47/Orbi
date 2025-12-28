@@ -148,26 +148,3 @@ def _build_visa_summary(
     )
 
     return f"{rule_part} – {duration}" if duration else rule_part
-
-
-# import json
-# import sys
-
-# # Example: Chinese passport → Indonesia
-# PASSPORT = "CN"
-# DESTINATION = "ID"
-
-# try:
-#     result = get_visa_requirements(
-#         passport_country_code=PASSPORT,
-#         destination_country_code=DESTINATION,
-#     )
-
-#     print("\n=== VISA SERVICE SMOKE TEST ===\n")
-#     print(json.dumps(result, indent=2, ensure_ascii=False))
-
-#     print("\n✅ Smoke test passed (no exceptions)\n")
-
-# except Exception as exc:
-#     print("\n❌ Smoke test failed\n", file=sys.stderr)
-#     raise
