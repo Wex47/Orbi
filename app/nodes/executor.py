@@ -71,7 +71,7 @@ def executor_node(state: Dict[str, Any]) -> Dict[str, Any]:
 
     messages = result.get("messages", [])
 
-    # Detect whether tools were used in during this invocation
+    # Detect whether tools were used during this invocation
     tools_used = any(
         (
             (isinstance(m, dict) and m.get("role") == "tool")
