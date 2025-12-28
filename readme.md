@@ -256,6 +256,7 @@ This layered approach improves reliability and debuggability.
 * Reduced graph verbosity
 * Typed contracts (Pydantic / dataclasses) for node outputs
 * Full coverage of unit and smoke tests
+* Full coverage of the logger
 * Broader caching strategy
 * Retry & recovery cycles within the graph
 
@@ -327,7 +328,7 @@ ANTHROPIC_API_KEY=your_anthropic_api_key
 # RapidAPI (entry requirements)
 RAPIDAPI_KEY=your_key
 
-# Amadeus (Flights)
+# Amadeus (Flights, recommendations)
 AMADEUS_API_KEY=your_key
 AMADEUS_API_SECRET=your_secret
 
@@ -362,14 +363,12 @@ You:
 ```text
 Is April a good time to visit Tokyo?
 What’s the weather like in Paris in October?
-What flights are available from TLV to HND on December 28, 2025?
+What flights are available from tel aviv to tokyo on December 28, 2025?
 What time will it be in Tokyo in 8 hours?
 ```
 
 ---
 
 No further setup is required.
-
-```
 
 ---

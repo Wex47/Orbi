@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import Dict, Any
 from app.infrastructure.llm import get_verifier_model
-from app.infrastructure.llm import get_lightweight_chat_model
 import logging
 from app.config.settings import settings
 
@@ -10,15 +9,7 @@ logger = logging.getLogger(__name__)
 VERIFIER_SYSTEM = """
 You are a verification agent.
 
-Check whether the proposed answer is sensible and consistent with:
-- the conversation
-- the query
-- any tool-derived facts (if mentioned)
-
-Rules:
-- Do NOT call tools.
-- If there are unsupported claims or contradictions, mark INVALID.
-- If OK, mark VERIFIED.
+Check whether the proposed answer is reasonable, and is consistent with the query and conversation.
 
 Return exactly:
 VERIFIED
@@ -33,8 +24,8 @@ def verifier_node(state: Dict[str, Any]) -> Dict[str, Any]:
     inputs: 'query', 'execution', 'messages'
     outputs: 'verified' (bool)
     """
-    # model = get_verifier_model()
-    model = get_lightweight_chat_model()
+
+    model = get_verifier_model()
 
     query = state.get("query") or []
     execution = state.get("execution") or ""
