@@ -10,6 +10,12 @@ from app.domain.timezone_service import get_current_time_by_timezone
 from app.domain.entry_requirements import get_visa_requirements
 from app.domain.embassies import get_israeli_embassies
 
+"""
+Tools for retrieving travel-related information.
+Notice that the description of each tool is very important, as it guides the agent on when to use it.
+The tool description is not 1-to-1 with the function docstring, as it may contain additional instructions and context for the agent.
+"""
+
 @tool
 def get_place_climate(place_name: str, month: str) -> str:
     """
@@ -21,9 +27,6 @@ def get_place_climate(place_name: str, month: str) -> str:
     climate data is required to support travel or seasonal decisions.
     """
     return fetch_climate_data(place_name=place_name,month=month)
-
-
-########################################
 
 
 @tool
@@ -53,9 +56,6 @@ def search_flights_tool(
     )
 
 
-#########################
-
-
 @tool
 def travel_recommendations_tool(
     city: str,
@@ -74,10 +74,6 @@ def travel_recommendations_tool(
         country_code=country_code,
         k=k,
     )
-
-
-########################################
-
 
 
 @tool
