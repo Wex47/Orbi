@@ -9,61 +9,21 @@ Domain logic for entry requirements using Travel Buddy API.
 Fetches and normalizes visa and entry requirement data.
 """
 
+
+# ---------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------
+
 TRAVEL_BUDDY_URL = "https://visa-requirement.p.rapidapi.com/v2/visa/check"
 TRAVEL_BUDDY_HOST = "visa-requirement.p.rapidapi.com"
 
 
+# ------------------------------------------------------------
+# Errors
+# ------------------------------------------------------------
+
 class VisaServiceError(RuntimeError):
     pass
-
-# ============================================================
-# Public API (THIS is what the tool calls)
-# ============================================================
-
-def get_visa_requirements(
-    passport_country_code: str,
-    destination_country_code: str,
-) -> Dict[str, Any]:
-    """
-    Central domain function for visa & entry requirements.
-
-    inputs:
-        passport_country_code: ISO Alpha-2 code of the traveler's passport country
-        destination_country_code: ISO Alpha-2 code of the destination country
-        for example: 'US' for United States, 'FR' for France, etc.
-    outputs:
-        A dictionary containing normalized visa and entry requirement information.
-    """
-
-    raw = _fetch_raw(
-        passport_country_code,
-        destination_country_code,
-    )
-
-    data = raw.get("data") or {}
-    visa_rules = data.get("visa_rules") or {}
-
-    primary = _normalize_rule(visa_rules.get("primary_rule"))
-    secondary = _normalize_rule(visa_rules.get("secondary_rule"))
-    exception = _normalize_rule(visa_rules.get("exception_rule"))
-    mandatory = _normalize_rule(data.get("mandatory_registration"))
-
-    return {
-        "passport": data.get("passport"),
-        "destination": data.get("destination"),
-
-        "visa": {
-            "summary": _build_visa_summary(primary, secondary),
-            "primary_rule": primary,
-            "secondary_rule": secondary,
-            "exception_rule": exception,
-        },
-
-        "mandatory_registration": mandatory,
-
-        "source": "Travel Buddy (RapidAPI)",
-        "disclaimer": "Visa rules may change. Always verify with official sources.",
-    }
 
 
 # ============================================================
@@ -153,3 +113,53 @@ def _build_visa_summary(
     )
 
     return f"{rule_part} – {duration}" if duration else rule_part
+
+
+# ============================================================
+# Public API (THIS is what the tool calls)
+# ============================================================
+
+def get_visa_requirements(
+    passport_country_code: str,
+    destination_country_code: str,
+) -> Dict[str, Any]:
+    """
+    Central domain function for visa & entry requirements.
+
+    inputs:
+        passport_country_code: ISO Alpha-2 code of the traveler's passport country
+        destination_country_code: ISO Alpha-2 code of the destination country
+        for example: 'US' for United States, 'FR' for France, etc.
+    outputs:
+        A dictionary containing normalized visa and entry requirement information.
+    """
+
+    raw = _fetch_raw(
+        passport_country_code,
+        destination_country_code,
+    )
+
+    data = raw.get("data") or {}
+    visa_rules = data.get("visa_rules") or {}
+
+    primary = _normalize_rule(visa_rules.get("primary_rule"))
+    secondary = _normalize_rule(visa_rules.get("secondary_rule"))
+    exception = _normalize_rule(visa_rules.get("exception_rule"))
+    mandatory = _normalize_rule(data.get("mandatory_registration"))
+
+    return {
+        "passport": data.get("passport"),
+        "destination": data.get("destination"),
+
+        "visa": {
+            "summary": _build_visa_summary(primary, secondary),
+            "primary_rule": primary,
+            "secondary_rule": secondary,
+            "exception_rule": exception,
+        },
+
+        "mandatory_registration": mandatory,
+
+        "source": "Travel Buddy (RapidAPI)",
+        "disclaimer": "Visa rules may change. Always verify with official sources.",
+    }

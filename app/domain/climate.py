@@ -1,33 +1,22 @@
-import requests
+from __future__ import annotations
 from datetime import datetime
 from collections import defaultdict
-from typing import Union
+from typing import Dict, Any, Union
+import requests
+from app.config.settings import settings
 
-# first function
-def geocode_place(place_name: str) -> dict:
-    url = "https://geocoding-api.open-meteo.com/v1/search"
-    params = {
-        "name": place_name,
-        "count": 1,
-        "language": "en",
-        "format": "json"
-    }
+"""
+Domain logic for climate data using Open-Meteo API.
+Fetches historical climate data for a given place and month.
+Returns average temperature and precipitation.
+"""
 
-    response = requests.get(url, params=params, timeout=10)
-    response.raise_for_status()
-    data = response.json()
+# ------------------------------------------------------------
+# Constants
+# ------------------------------------------------------------
 
-    if not data.get("results"):
-        raise ValueError(f"No coordinates found for '{place_name}'.")
-
-    r = data["results"][0]
-
-    return {
-        "name": r["name"],
-        "country": r.get("country", "Unknown"),
-        "latitude": r["latitude"],
-        "longitude": r["longitude"],
-    }
+GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
+CLIMATE_URL = "https://archive-api.open-meteo.com/v1/era5"
 
 MONTHS = {
     "january": 1, "february": 2, "march": 3, "april": 4,
@@ -37,92 +26,159 @@ MONTHS = {
 
 MONTHS_NUM_TO_NAME = {v: k for k, v in MONTHS.items()}
 
-# second function
-def get_monthly_climate_by_coords(
-    latitude: float,
-    longitude: float,
-    month: Union[str, int],
-) -> dict:
-    """
-    month can be either:
-    - month name (e.g. "may")
-    - month number (e.g. 5)
-    """
+# ------------------------------------------------------------
+# Errors
+# ------------------------------------------------------------
 
-    # Normalize month
+class ClimateServiceError(RuntimeError):
+    pass
+
+
+# ------------------------------------------------------------
+# Helpers
+# ------------------------------------------------------------
+
+def _normalize_month(month: Union[str, int]) -> tuple[int, str]:
     if isinstance(month, str):
         month_num = MONTHS.get(month.lower())
         if not month_num:
             raise ValueError("Invalid month name.")
-        month_name = month.lower()
+        return month_num, month.lower()
 
-    elif isinstance(month, int):
+    if isinstance(month, int):
         if not 1 <= month <= 12:
             raise ValueError("Month number must be between 1 and 12.")
-        month_num = month
-        month_name = MONTHS_NUM_TO_NAME[month]
+        return month, MONTHS_NUM_TO_NAME[month]
 
-    else:
-        raise ValueError("Month must be a string or integer.")
+    raise ValueError("Month must be a string or integer.")
 
-    url = "https://archive-api.open-meteo.com/v1/era5"
 
-    params = {
-        "latitude": latitude,
-        "longitude": longitude,
-        "start_date": "2010-01-01",
-        "end_date": "2020-12-31",
-        "daily": [
-            "temperature_2m_mean",
-            "precipitation_sum"
-        ],
-        "timezone": "UTC"
-    }
+# ------------------------------------------------------------
+# Fetch & normalize
+# ------------------------------------------------------------
 
-    response = requests.get(url, params=params, timeout=15)
-    response.raise_for_status()
-    data = response.json()
+def _geocode(place_name: str) -> Dict[str, Any]:
+    try:
+        response = requests.get(
+            GEOCODE_URL,
+            params={
+                "name": place_name,
+                "count": 1,
+                "language": "en",
+                "format": "json",
+            },
+            timeout=settings.HTTP_TIMEOUT,
+        )
+        response.raise_for_status()
+        data = response.json()
 
-    dates = data["daily"]["time"]
-    temps = data["daily"]["temperature_2m_mean"]
-    rain = data["daily"]["precipitation_sum"]
+        if not data.get("results"):
+            raise ClimateServiceError(
+                f"No coordinates found for '{place_name}'."
+            )
 
-    month_temps = []
-    rain_by_year = defaultdict(float)
+        r = data["results"][0]
+        return {
+            "name": r["name"],
+            "country": r.get("country", "Unknown"),
+            "latitude": r["latitude"],
+            "longitude": r["longitude"],
+        }
 
-    for d, t, r in zip(dates, temps, rain):
-        dt = datetime.fromisoformat(d)
-        if dt.month == month_num:
-            month_temps.append(t)
-            rain_by_year[dt.year] += r
+    except Exception as exc:
+        raise ClimateServiceError("Failed to geocode place") from exc
 
-    avg_temp = round(sum(month_temps) / len(month_temps), 1)
-    avg_rain = round(
-        sum(rain_by_year.values()) / len(rain_by_year),
-        1
+
+def _fetch_monthly_climate(
+    latitude: float,
+    longitude: float,
+    month_num: int,
+) -> Dict[str, float]:
+    try:
+        response = requests.get(
+            CLIMATE_URL,
+            params={
+                "latitude": latitude,
+                "longitude": longitude,
+                "start_date": "2010-01-01",
+                "end_date": "2020-12-31",
+                "daily": [
+                    "temperature_2m_mean",
+                    "precipitation_sum",
+                ],
+                "timezone": "UTC",
+            },
+            timeout=settings.HTTP_TIMEOUT,
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        dates = data["daily"]["time"]
+        temps = data["daily"]["temperature_2m_mean"]
+        rain = data["daily"]["precipitation_sum"]
+
+        month_temps = []
+        rain_by_year = defaultdict(float)
+
+        for d, t, r in zip(dates, temps, rain):
+            dt = datetime.fromisoformat(d)
+            if dt.month == month_num:
+                month_temps.append(t)
+                rain_by_year[dt.year] += r
+
+        if not month_temps:
+            raise ClimateServiceError("No climate data for given month.")
+
+        return {
+            "average_temperature_c": round(
+                sum(month_temps) / len(month_temps), 1
+            ),
+            "average_precipitation_mm": round(
+                sum(rain_by_year.values()) / len(rain_by_year), 1
+            ),
+        }
+
+    except Exception as exc:
+        raise ClimateServiceError(
+            "Failed to fetch climate data"
+        ) from exc
+
+
+# ------------------------------------------------------------
+# Public domain API
+# ------------------------------------------------------------
+
+def fetch_climate_data(
+    place_name: str,
+    month: Union[str, int],
+) -> Dict[str, Any]:
+    """
+    Return average historical climate for a place and month.
+    inputs:
+        place_name: Name of the place (city, town, etc.)
+        month: Month name (e.g. "may") or month number (e.g. 5)
+    outputs:
+        A dictionary with:
+        {
+            "place": str,          # Normalized place name
+            "country": str,        # Country name
+            "month": str,          # Month name capitalized
+            "average_temperature_c": float,
+            "average_precipitation_mm": float,
+        }
+    """
+
+    month_num, month_name = _normalize_month(month)
+    location = _geocode(place_name)
+    climate = _fetch_monthly_climate(
+        location["latitude"],
+        location["longitude"],
+        month_num,
     )
 
     return {
+        "place": location["name"],
+        "country": location["country"],
         "month": month_name.capitalize(),
-        "average_temperature_c": avg_temp,
-        "average_precipitation_mm": avg_rain,
+        **climate,
     }
-
-
-def fetch_climate_data(place_name: str, month: str):
-    try:
-        coords = geocode_place(place_name)
-        climate = get_monthly_climate_by_coords(
-            coords["latitude"],
-            coords["longitude"],
-            month
-        )
-
-        return (
-            f"{coords['name']}, {coords['country']} in {month.capitalize()}:\n"
-            f"- Avg temperature: {climate['average_temperature_c']}°C\n"
-            f"- Precipitation: {climate['average_precipitation_mm']} mm"
-        )
-
-    except Exception as e:
-        return str(e)

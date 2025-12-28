@@ -84,6 +84,13 @@ RECORDS = load_travel_warnings()
 # Public API: recommendations only
 # ---------------------------------------------------------------------
 def fetch_travel_warnings(country_en: str) -> set[str]:
+    """
+    Fetch travel warnings for a given country (in English).
+    inputs:
+        country_en: Country name in English
+    outputs:
+        A set of travel warning recommendations.
+    """
 
     # 1. Fast deterministic path
     hebrew = COUNTRY_EN_TO_HE.get(country_en.strip().lower())

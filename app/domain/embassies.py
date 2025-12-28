@@ -7,6 +7,11 @@ import html
 import requests
 from app.config.settings import settings
 
+"""
+Domain logic for travel warnings using Israeli government API.
+Fetches embassy contact details with weekly caching, which corresponds to the official update rate.
+"""
+
 # ------------------------------------------------------------
 # Constants
 # ------------------------------------------------------------
