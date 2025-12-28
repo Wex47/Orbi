@@ -138,6 +138,13 @@ def get_travel_recommendations(
 ) -> Dict[str, Any]:
     """
     Return top-k destination experiences for a given city.
+    inputs:
+    - city: City name (e.g., "Paris")
+    - country_code: Optional ISO country code to disambiguate (e.g., "FR")
+    - k: Number of recommendations to return (default: 5)
+    - radius_km: Search radius in kilometers (default: 10)
+    outputs:
+    - dict with city info and list of recommended activities
     """
 
     city_data = _fetch_city(

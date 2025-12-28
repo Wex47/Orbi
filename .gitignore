@@ -14,3 +14,6 @@ app/cache/*
 
 # log files
 logs/*
+
+# style and linting caches
+**/.ruff_cache/

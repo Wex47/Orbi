@@ -37,37 +37,38 @@ def _validate_timezone(timezone: str) -> None:
 
 def _fetch_time_data(timezone: str) -> Dict[str, Any]:
     url = f"{WORLD_TIME_API_BASE}/timezone/{timezone}"
+    last_exc: Exception | None = None
 
-    try:
-        response = requests.get(url, timeout=REQUEST_TIMEOUT_SECONDS)
-        response.raise_for_status()
+    for attempt in range(3):
+        try:
+            response = requests.get(url, timeout=REQUEST_TIMEOUT_SECONDS)
+            response.raise_for_status()
 
-    except requests.exceptions.Timeout as exc:
-        raise WorldTimeServiceError(
-            "WorldTimeAPI request timed out."
-        ) from exc
+            try:
+                return response.json()
+            except ValueError as exc:
+                raise WorldTimeServiceError(
+                    "Invalid JSON response from WorldTimeAPI."
+                ) from exc
 
-    except requests.exceptions.HTTPError as exc:
-        if response.status_code == 404:
-            raise WorldTimeServiceError(
-                f"Unknown timezone '{timezone}'."
-            ) from exc
+        except requests.exceptions.Timeout as exc:
+            last_exc = exc
 
-        raise WorldTimeServiceError(
-            f"WorldTimeAPI error: HTTP {response.status_code}."
-        ) from exc
+        except requests.exceptions.HTTPError as exc:
+            if response.status_code == 404:
+                raise WorldTimeServiceError(
+                    f"Unknown timezone '{timezone}'."
+                ) from exc
 
-    except requests.exceptions.RequestException as exc:
-        raise WorldTimeServiceError(
-            "Network error while contacting WorldTimeAPI."
-        ) from exc
+            last_exc = exc
 
-    try:
-        return response.json()
-    except ValueError as exc:
-        raise WorldTimeServiceError(
-            "Invalid JSON response from WorldTimeAPI."
-        ) from exc
+        except requests.exceptions.RequestException as exc:
+            last_exc = exc
+
+    raise WorldTimeServiceError(
+        "WorldTimeAPI unavailable after retries."
+    ) from last_exc
+
 
 # ------------------------------------------------------------
 # Public domain API
