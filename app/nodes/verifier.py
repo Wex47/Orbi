@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from typing import Dict, Any
 from app.infrastructure.llm import get_verifier_model
 from app.infrastructure.llm import get_lightweight_chat_model
 import logging
@@ -27,9 +27,11 @@ INVALID: <one short reason>
 """.strip()
 
 
-def verifier_node(state: dict) -> dict:
+def verifier_node(state: Dict[str, Any]) -> Dict[str, Any]:
     """
     validates the correctness of the proposed answer based on consistency and sensibility.
+    inputs: 'query', 'execution', 'messages'
+    outputs: 'verified' (bool)
     """
     # model = get_verifier_model()
     model = get_lightweight_chat_model()

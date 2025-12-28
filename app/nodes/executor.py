@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Dict, Any
 import logging
 from langchain.agents import create_agent
 from langchain_core.messages import ToolMessage
@@ -32,10 +33,13 @@ _AGENT = create_agent(
 )
 
 
-def executor_node(state: dict) -> dict:
+def executor_node(state: Dict[str, Any]) -> Dict[str, Any]:
     """
     ReAct-style unified executor, that plans, reasons,
     uses tools and generates final answers.
+
+    inputs: 'messages'
+    outputs: 'execution', 'tools_used' (bool)
     """
 
     try:

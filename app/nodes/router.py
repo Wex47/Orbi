@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Dict, Any
 from app.infrastructure.llm import get_lightweight_chat_model
 from app.config.settings import settings
 import logging
@@ -33,11 +34,14 @@ Rules:
 Return ONLY one word: OFF_TOPIC, DIRECT, or PLAN.
 """.strip()
 
-def router_node(state: dict) -> dict:
+
+def router_node(state: Dict[str, Any]) -> Dict[str, Any]:
     """
     Routes the conversation based on the latest user message.
     Analyzes whether the request is OFF_TOPIC, DIRECT, or PLAN.
-    Uses a lightweight LLM for classification.
+    
+    inputs: 'messages'
+    outputs: 'route', 'query'
     """
     model = get_lightweight_chat_model()
 
