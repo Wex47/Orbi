@@ -1,5 +1,3 @@
-# flight_search.py
-
 from datetime import date
 from typing import List, Dict, Any
 from app.infrastructure.amadeus_client import get_amadeus_client
@@ -15,6 +13,20 @@ def search_flights(
     adults: int = 1,
     max_results: int = 5,
 ) -> List[Dict[str, Any]]:
+    
+    """
+    Search for flight offers using the Amadeus API.
+    inputs:
+        origin: IATA code of the origin airport
+        destination: IATA code of the destination airport
+        departure_date: Date of departure
+        return_date: Optional date of return
+        adults: Number of adult passengers
+        max_results: Maximum number of flight offers to return
+    outputs:
+        A list of flight offer dictionaries containing details such as
+        total price, currency, duration, and segments.
+    """
     client = get_amadeus_client()
 
     params = {

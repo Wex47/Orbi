@@ -8,8 +8,11 @@ from app.config.logger import setup_logging
 
 def main():
 
+    # SETUP
     setup_logging()
     thread_id = "1"  # fixed for testing
+    settings.CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    #
 
     with PostgresSaver.from_conn_string(settings.postgres_dsn) as checkpointer:
 

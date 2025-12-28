@@ -3,14 +3,25 @@ import requests
 
 WORLD_TIME_API_BASE = "http://worldtimeapi.org/api"
 
-
 def get_current_time_by_timezone(timezone: str) -> Dict[str, Any]:
     """
     Fetch the current local time and timezone metadata for a given timezone.
-
-    Returns a structured response instead of raising exceptions, so tools
-    can fail gracefully and agents can reason about the failure.
+    inputs: 
+        timezone: Timezone string in the format 'Area/Location' (e.g., 'Europe/London')
+    outputs:
+        A dictionary with either:
+            - On success:
+                {
+                    "status": "ok",
+                    "data": { ... WorldTimeAPI response data ... }
+                }
+            - On error:
+                {
+                    "status": "error",
+                    "error": "Error message describing the issue."
+                }
     """
+    
     if not timezone or "/" not in timezone:
         return {
             "status": "error",

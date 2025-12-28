@@ -1,16 +1,16 @@
-
+from __future__ import annotations
 from typing import Optional
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import Field
-from dotenv import load_dotenv
 from pathlib import Path
-import os
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from dotenv import load_dotenv
 
-load_dotenv()  # must be before BaseSettings is instantiated
+
+# Load .env early, before Settings instantiation
+load_dotenv()
 
 
 class Settings(BaseSettings):
-
     # --------------------
     # App
     # --------------------
@@ -20,21 +20,20 @@ class Settings(BaseSettings):
     # --------------------
     # Logging
     # --------------------
-    LOG_LEVEL: str = "INFO"
+    LOG_LEVEL: str = "DEBUG"
     LOG_FORMAT: str = "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
+    LOG_FILE_NAME: str = "app.log"
+    LOG_MAX_BYTES: int = 5_000_000  # 5 MB
+    LOG_BACKUP_COUNT: int = 3
     SUCCESS_GENERIC: str = "invocation succeeded"
     FAILED_GENERIC: str = "invocation failed"
 
-
     # --------------------
-    # 
+    # Paths
     # --------------------
-    
     PROJECT_ROOT: Path = Path(__file__).resolve().parents[2]
     DATA_DIR: Path = PROJECT_ROOT / "app" / "data"
     CACHE_DIR: Path = PROJECT_ROOT / "app" / "cache"
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-
 
     # --------------------
     # Models
@@ -48,10 +47,10 @@ class Settings(BaseSettings):
     VERIFIER_MODEL_NAME: str = "gemini-2.5-flash"
     VERIFIER_TEMP: float = 0.0
 
-    # ------------------------
-    # Summarize parameters 
-    # ------------------------
-    MAX_SUMMARY_INPUT_TOKENS: int  = 6000
+    # --------------------
+    # Summarization
+    # --------------------
+    MAX_SUMMARY_INPUT_TOKENS: int = 6000
     SUMMARY_TOKENS_THRESHOLD: int = 4000
     MAX_SUMMARY_OUTPUT_TOKENS: int = 256
 
@@ -68,7 +67,9 @@ class Settings(BaseSettings):
     AMADEUS_API_KEY: str
     AMADEUS_API_SECRET: str
     AMADEUS_BASE_URL: str = "https://test.api.amadeus.com"
-    AMADEUS_TOKEN_URL: str = "https://test.api.amadeus.com/v1/security/oauth2/token"
+    AMADEUS_TOKEN_URL: str = (
+        "https://test.api.amadeus.com/v1/security/oauth2/token"
+    )
 
     # --------------------
     # Weather
@@ -78,11 +79,11 @@ class Settings(BaseSettings):
     # --------------------
     # Government APIs
     # --------------------
-    GOV_IL_API_KEY: str = "https://data.gov.il/api/3/action/datastore_search"
+    GOV_IL_API_URL: str = "https://data.gov.il/api/3/action/datastore_search"
 
-    #
-    # RAPID API
-    #
+    # --------------------
+    # RapidAPI
+    # --------------------
     RAPIDAPI_KEY: str
 
     # --------------------
@@ -90,47 +91,28 @@ class Settings(BaseSettings):
     # --------------------
     HTTP_TIMEOUT: int = 10
 
+    # --------------------
+    # Database
+    # --------------------
+    POSTGRES_HOST: str = Field(..., alias="POSTGRES_HOST")
+    POSTGRES_PORT: int = Field(..., alias="POSTGRES_PORT")
+    POSTGRES_USER: str = Field(..., alias="POSTGRES_USER")
+    POSTGRES_PASSWORD: str = Field(..., alias="POSTGRES_PASSWORD")
+    POSTGRES_DB: str = Field(..., alias="POSTGRES_DB")
+
+    @property
+    def postgres_dsn(self) -> str:
+        return (
+            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore",
     )
 
-    # -----------------------
-    # Database (Memory backup)
-    # -----------------------
 
-    postgres_host: str = Field(..., alias="POSTGRES_HOST")
-    postgres_port: int = Field(..., alias="POSTGRES_PORT")
-    postgres_user: str = Field(..., alias="POSTGRES_USER")
-    postgres_password: str = Field(..., alias="POSTGRES_PASSWORD")
-    postgres_db: str = Field(..., alias="POSTGRES_DB")
-
-    @property
-    def postgres_dsn(self) -> str:
-        """
-        Build a PostgreSQL DSN from structured settings.
-        """
-        return (
-            f"postgresql://"
-            f"{self.postgres_user}:{self.postgres_password}"
-            f"@{self.postgres_host}:{self.postgres_port}"
-            f"/{self.postgres_db}"
-        )
-
-# --------------------
-# Instantiate settings
-# --------------------
+# Singleton settings object
 settings = Settings()
-
-# --------------------
-# Explicit env injection (intentional & centralized)
-# --------------------
-if settings.ANTHROPIC_API_KEY:
-    os.environ["ANTHROPIC_API_KEY"] = settings.ANTHROPIC_API_KEY
-
-if settings.OPENAI_API_KEY:
-    os.environ["OPENAI_API_KEY"] = settings.OPENAI_API_KEY
-
-if settings.GOOGLE_API_KEY:
-    os.environ["GOOGLE_API_KEY"] = settings.GOOGLE_API_KEY

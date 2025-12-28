@@ -1,7 +1,11 @@
 
-from typing import Optional, Dict, Any
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from app.infrastructure.amadeus_client import get_amadeus_client
+
+"""
+Domain logic for travel recommendations using Amadeus API.
+Gets the destination coordinates and fetches top-k experiences for that place.
+"""
 
 
 def get_city_coordinates(
@@ -33,7 +37,6 @@ def get_city_coordinates(
         params=params,
     )
 
-    # 🔴 NEW: handle API / network errors
     if "error" in response:
         return {
             "error": "City lookup failed",
@@ -61,12 +64,6 @@ def get_city_coordinates(
         "latitude": geo.get("latitude"),
         "longitude": geo.get("longitude"),
     }
-
-
-# app/domain/destination_experiences.py
-
-from typing import List, Dict
-from app.infrastructure.amadeus_client import get_amadeus_client
 
 
 def get_top_k_destination_experiences(

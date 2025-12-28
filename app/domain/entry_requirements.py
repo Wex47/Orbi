@@ -4,6 +4,10 @@ import requests
 from app.config.settings import settings
 import json
 
+"""
+Domain logic for entry requirements using Travel Buddy API.
+Fetches and normalizes visa and entry requirement data.
+"""
 
 TRAVEL_BUDDY_URL = "https://visa-requirement.p.rapidapi.com/v2/visa/check"
 TRAVEL_BUDDY_HOST = "visa-requirement.p.rapidapi.com"
@@ -11,7 +15,6 @@ TRAVEL_BUDDY_HOST = "visa-requirement.p.rapidapi.com"
 
 class VisaServiceError(RuntimeError):
     pass
-
 
 # ============================================================
 # Public API (THIS is what the tool calls)
@@ -24,10 +27,12 @@ def get_visa_requirements(
     """
     Central domain function for visa & entry requirements.
 
-    Owns:
-    - API integration
-    - normalization of optional fields
-    - interpretation of visa rules
+    inputs:
+        passport_country_code: ISO Alpha-2 code of the traveler's passport country
+        destination_country_code: ISO Alpha-2 code of the destination country
+        for example: 'US' for United States, 'FR' for France, etc.
+    outputs:
+        A dictionary containing normalized visa and entry requirement information.
     """
 
     raw = _fetch_raw(

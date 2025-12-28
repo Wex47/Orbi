@@ -12,7 +12,7 @@ from app.config.settings import settings
 # ------------------------------------------------------------
 
 RESOURCE_ID = "6fc859cb-8a6f-458b-bd5a-9bd0cfbfce11"
-DATASET_URL = settings.GOV_IL_API_KEY + f"?resource_id={RESOURCE_ID}"
+DATASET_URL = settings.GOV_IL_API_URL + f"?resource_id={RESOURCE_ID}"
 
 CACHE_TTL_SECONDS = 7 * 24 * 60 * 60  # once a week
 CACHE_PATH = settings.CACHE_DIR / "_israeli_embassies_cache.json"
