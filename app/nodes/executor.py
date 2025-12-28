@@ -1,4 +1,12 @@
 from __future__ import annotations
+import logging
+from langchain.agents import create_agent
+from langchain_core.messages import ToolMessage
+from app.infrastructure.llm import get_lightweight_chat_model
+from app.tools.tools import TRAVEL_TOOLS
+from app.config.settings import settings
+
+logger = logging.getLogger(__name__)
 
 EXECUTOR_SYSTEM = """
 You are a travel assistant that plans and executes tasks as needed.
@@ -13,19 +21,11 @@ Instructions:
 Do not expose your internal chain-of-thought.
 """.strip()
 
-from langchain.agents import create_agent
-from langchain_core.messages import ToolMessage
-from app.infrastructure.llm import get_chat_model
-from app.infrastructure.llm import get_lightweight_chat_model
-from app.tools.tools import TRAVEL_TOOLS
-
-
 # ------------------------------------------------------------------
 # ReAct-style unified executor
 # ------------------------------------------------------------------
 
 _AGENT = create_agent(
-    # model=get_chat_model(),
     model=get_lightweight_chat_model(),
     tools=TRAVEL_TOOLS,
     system_prompt=EXECUTOR_SYSTEM,
@@ -34,23 +34,26 @@ _AGENT = create_agent(
 
 def executor_node(state: dict) -> dict:
     """
-    Unified planner + executor node.
-
-    The agent is responsible for:
-    - deciding what steps are needed
-    - calling tools if required
-    - producing the final answer
+    ReAct-style unified executor, that plans, reasons,
+    uses tools and generates final answers.
     """
 
-    result = _AGENT.invoke(
+    try:
+        result = _AGENT.invoke(
         {
             "messages": state["messages"]
         }
-    )
+        )
+        logger.debug(settings.SUCCESS_GENERIC)
+
+    except Exception as exc:
+        logger.exception(settings.FAILED_GENERIC)
+        raise exc
+    
 
     messages = result.get("messages", [])
 
-    # Detect whether tools were used
+    # Detect whether tools were used in during this invocation
     tools_used = any(
         (
             (isinstance(m, dict) and m.get("role") == "tool")

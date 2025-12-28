@@ -19,6 +19,15 @@ class Settings(BaseSettings):
     ENV: str = "dev"
 
     # --------------------
+    # Logging
+    # --------------------
+    LOG_LEVEL: str = "INFO"
+    LOG_FORMAT: str = "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
+    SUCCESS_GENERIC: str = "invocation succeeded"
+    FAILED_GENERIC: str = "invocation failed"
+
+
+    # --------------------
     # 
     # --------------------
     
@@ -66,6 +75,11 @@ class Settings(BaseSettings):
     # Weather
     # --------------------
     OPEN_METEO_BASE_URL: str = "https://api.open-meteo.com"
+
+    # --------------------
+    # Government APIs
+    # --------------------
+    GOV_IL_API_KEY: str = "https://data.gov.il/api/3/action/datastore_search"
 
     #
     # RAPID API

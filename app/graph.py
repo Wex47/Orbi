@@ -9,7 +9,10 @@ from app.nodes.finalizer import finalizer_node
 from app.nodes.off_topic import off_topic_node
 from app.nodes.summarize import build_summarization_node
 
+
+
 def build_graph(checkpointer):
+
     builder = StateGraph(State)
 
     builder.add_node("summarize", build_summarization_node())
@@ -19,8 +22,6 @@ def build_graph(checkpointer):
     builder.add_node("executor", executor_node)
     builder.add_node("verifier", verifier_node)
     builder.add_node("finalizer", finalizer_node)
-    
-    #####
     
     builder.add_edge(START, "summarize")
     builder.add_edge("summarize", "router")

@@ -3,10 +3,12 @@ import uuid
 from langgraph.checkpoint.postgres import PostgresSaver
 from app.config.settings import settings
 from app.graph import build_graph
+from app.config.logger import setup_logging
 
 
 def main():
 
+    setup_logging()
     thread_id = "1"  # fixed for testing
 
     with PostgresSaver.from_conn_string(settings.postgres_dsn) as checkpointer:

@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from app.infrastructure.llm import get_verifier_model
 from app.infrastructure.llm import get_lightweight_chat_model
+import logging
+from app.config.settings import settings
 
+logger = logging.getLogger(__name__)
 
 VERIFIER_SYSTEM = """
 You are a verification agent.
@@ -25,6 +28,9 @@ INVALID: <one short reason>
 
 
 def verifier_node(state: dict) -> dict:
+    """
+    validates the correctness of the proposed answer based on consistency and sensibility.
+    """
     # model = get_verifier_model()
     model = get_lightweight_chat_model()
 
@@ -43,8 +49,13 @@ def verifier_node(state: dict) -> dict:
         + [{"role": "user", "content": verifier_prompt}]
     )
 
-    verdict = model.invoke(messages).content.strip()
+    try:
+        verdict = model.invoke(messages).content.strip()
+        logger.debug(settings.SUCCESS_GENERIC)
+    except Exception as exc:
+        logger.exception(settings.FAILED_GENERIC)
+        raise exc
+    
     verified = verdict.startswith("VERIFIED")
 
-    # If invalid, keep the reason for debugging; you can also loop/retry later.
     return {"verified": verified}

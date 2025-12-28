@@ -11,3 +11,6 @@ __pycache__/
 
 # cached files
 app/cache/*
+
+# log files
+logs/*

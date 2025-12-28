@@ -9,8 +9,8 @@ sys.stdout.reconfigure(encoding="utf-8")
 # ---------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------
-DATASET_URL = "https://data.gov.il/api/3/action/datastore_search"
 RESOURCE_ID = "2a01d234-b2b0-4d46-baa0-cec05c401e7d"
+DATASET_URL = settings.GOV_IL_API_KEY + f"?resource_id={RESOURCE_ID}"
 DATASET_LIMIT = 32000
 
 CACHE_FILE = settings.CACHE_DIR / "travel_warnings_cache.json"

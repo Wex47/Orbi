@@ -6,8 +6,8 @@ from app.config.settings import settings
 
 def build_summarization_node() -> SummarizationNode:
     """
-    Builds a deterministic summarization node for short-term memory control.
-
+    Builds a summarization node for short-term memory control.
+    
     - Summarizes only when thresholds are crossed
     - Keeps summary size bounded
     - Safe to run on every graph iteration
