@@ -26,18 +26,16 @@ The assistant is exposed via a **CLI interface**.
 
 **Primary domain:** Travel planning & decision support
 
-Orbi supports the following categories of queries (individually or combined):
+Orbi supports the following categories of queries (individually, or combined, in any phrasing):
 
 ### 1️⃣ Weather & Climate
-- *“Is April a good time to visit Tokyo?”*
 - *“What’s the weather like in Paris in October?”*
 
 ### 2️⃣ Activities & Recommendations
 - *“What are the best things to do in Tokyo?”*
-- *“What attractions are near central Rome?”*
 
 ### 3️⃣ Flight Search
-- *“What flights are available from TLV to HND on December 28, 2025?”*
+- *“find me flights from tel aviv to athens tomorrow.”*
 
 ### 4️⃣ Time-Based Queries
 - *“What time will it be in Tokyo when I land in 8 hours?”*
@@ -46,7 +44,7 @@ Orbi supports the following categories of queries (individually or combined):
 - *“Is it safe to travel to Ireland right now?”*
 
 ### 6️⃣ Israeli Foreign Missions
-- *“I lost my passport in Delhi — who should I contact?”*
+- *“I lost my passport in Delhi - who should I contact?”*
 
 ### 7️⃣ Entry Requirements
 - *“What are the entry requirements for Mexico if I hold a Polish passport?”*
