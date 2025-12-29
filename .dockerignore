@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environments
+.venv/
+
+# Environment variables (never bake secrets)
+.env
+.env.*
+
+# Runtime artifacts (created at runtime or mounted)
+logs/
+*.log
+app/cache/
+
+# Dev / tooling
+.git/
+.gitignore
+.vscode/
+**/.ruff_cache/
+transcripts/
+
+
+# Tests (optional – include only if needed in image)
+tests/
