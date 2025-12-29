@@ -1,8 +1,10 @@
 
-# Orbi - Intelligent Travel Assistant
+# Orbi — Intelligent Travel Assistant
 
-Orbi was created to address a pain point I frequently encounter as a travel enthusiast.
-its focus is **Planning**.
+I built Orbi to solve a problem I kept running into as a traveler: planning a trip takes too much time and too many websites.
+
+Orbi brings scattered travel information into one place, with a clear focus on **planning**.
+
 
 ---
 
@@ -26,7 +28,7 @@ The assistant is exposed via a **CLI interface**.
 
 **Primary domain:** Travel planning & decision support
 
-Orbi supports the following categories of queries (individually, or combined, in any phrasing):
+Orbi currently supports the following type of queries (individually, or combined, in any phrasing):
 
 ### 1️⃣ Weather & Climate
 - *“What’s the weather like in Paris in October?”*
@@ -73,6 +75,7 @@ Orbi is implemented as a **LangGraph execution graph**, where each node has a **
 - **Orchestration**: LangGraph
 - **Observability**: LangSmith (development only)
 - **Containerization**: Docker 4.4.48
+- **External Data Sources**: Open-Meteo, Amadeus, Data.gov.il, Travel-buddy
 
 ---
 
@@ -93,7 +96,7 @@ app/
 tests/
 ├── Mirrors the `app/` package structure for clear ownership and traceability
 ├── Follows the `test_<file_name>.py` naming convention
-└── Emphasizes contract testing, with selective unit and end-to-end smoke coverage
+└── Emphasizes contract and unit testing and selective end-to-end smoke coverage
 
 ```
 
@@ -105,7 +108,7 @@ tests/
 
 * The user interacts via a CLI.
 * Each message is appended to the graph state.
-* Conversation state is persisted via a **LangGraph checkpointer (PostgreSQL)**.
+* Conversation state is kept in memory, and persisted via a **LangGraph checkpointer (PostgreSQL)**.
 
 ---
 
@@ -175,8 +178,8 @@ A **separate verifier LLM** evaluates the response:
 Verifier characteristics:
 
 * Deterministic (temperature = 0)
-* Non-streaming
 * Validation-only (no generation)
+* reasoning model
 
 ---
 
@@ -210,28 +213,28 @@ Hallucination control is handled across multiple layers:
 * Independent validation model
 * Focused solely on correctness and coherence
 
-This layered approach improves reliability and debuggability.
-
----
-
-## 🧑‍💻 Interface
-
-* **CLI-based interface** (assignment requirement)
-* Designed for easy extension to:
-
-  * Web UI
-  * Streaming (SSE / WebSockets)
-  * Multi-client environments
-
 ---
 
 ## 🔮 Future Improvements
 
+
+### Architecture & Code Quality
+
+- Fully asynchronous design to support concurrent clients and scalable deployment
+- Secure communication with PostgreSQL
+- Controlled and concise chatbot responses to reduce verbosity
+- Strongly typed contracts using Pydantic and dataclasses for node and domain function outputs
+- Comprehensive unit and smoke test coverage
+- End-to-end logging coverage across the system
+- Expanded caching strategy for improved performance and resilience
+- Built-in retry and recovery flows within the graph to handle failures and mitigate detected hallucinations
+
 ### Expanded Travel Capabilities
+
+For example:
 
 * Vaccination recommendations
 * End-to-end trip cost estimation:
-
   * Flights
   * Accommodation
   * Food
@@ -245,18 +248,8 @@ This layered approach improves reliability and debuggability.
 * Web-based UI
 * Hebrew language support
 * Voice interaction
-* Persistent user preferences
+* Persistent user preferences ("long term memory")
 * User management
-
-### Architecture & Code Quality
-
-* Secure PostgreSQL communication
-* Reduced graph verbosity
-* Typed contracts (Pydantic / dataclasses) for node outputs
-* Full coverage of unit and smoke tests
-* Full coverage of the logger
-* Broader caching strategy
-* Retry & recovery cycles within the graph
 
 ---
 
