@@ -264,9 +264,17 @@ Both modes use the same environment configuration.
 
 ---
 
-## Environment Configuration
+## Initial Setup
 
-Orbi requires a `.env` file in the project root.
+
+Clone the Repository:
+
+```bash
+git clone https://github.com/Wex47/Orbi.git
+cd Orbi
+``` 
+
+In addition, Orbi requires a `.env` file in the project root.
 
 Create a file named `.env` with the following contents:
 
@@ -294,10 +302,12 @@ POSTGRES_DB=orbi
 > If PostgreSQL is running on your host machine, set
 > `POSTGRES_HOST=host.docker.internal`.
 
+
 ---
 
 ## Option A — Run with Docker
 
+from the project root directory:
 
 ### 1️⃣ Build the Docker Image
 
@@ -347,18 +357,10 @@ Verify:
 uv --version
 ```
 
----
-
-### 2️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/Wex47/Orbi.git
-cd Orbi
-```
 
 ---
 
-### 3️⃣ Install Dependencies
+### 2️⃣ Install Dependencies
 
 ```bash
 uv sync
@@ -368,7 +370,7 @@ Creates an isolated virtual environment using `pyproject.toml` and `uv.lock`.
 
 ---
 
-### 4️⃣ Run the Assistant
+### 3️⃣ Run the Assistant
 
 ```bash
 uv run python -m app.main
