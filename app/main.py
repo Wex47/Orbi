@@ -11,7 +11,7 @@ def main():
     # SETUP
     setup_logging()
     thread_id = settings.THREAD_ID or str(uuid.uuid4()) # if not set, generate a uuid
-    settings.CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    # settings.CACHE_DIR.mkdir(parents=True, exist_ok=True)
     #
 
     with PostgresSaver.from_conn_string(settings.postgres_dsn) as checkpointer:

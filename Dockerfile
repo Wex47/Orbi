@@ -1,30 +1,30 @@
 FROM python:3.11-slim
 
+# Python hygiene
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install curl (for uv installer)
+# Install minimal system deps
 RUN apt-get update && apt-get install -y curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.cargo/bin:${PATH}"
+ENV PATH="/root/.local/bin:${PATH}"
 
-# Copy lock + pyproject first for dependency caching
+# Copy dependency manifests first (cache-friendly)
 COPY pyproject.toml uv.lock ./
 
-# Install deps from lockfile (no dev deps)
+# Install dependencies into uv-managed virtualenv (.venv)
 RUN uv sync --frozen --no-dev
 
-# Copy the rest of the code
+# Copy application code
 COPY . .
 
-# Ensure logs dir exists (matches logger.py's Path("logs"))
+# Create log directory
 RUN mkdir -p /app/logs
 
-# Run your CLI (pick the correct entrypoint)
-# Option A: if you have app/__main__.py -> python -m app
-ENTRYPOINT ["python", "-m", "app.main"]
+# Run Orbi using the virtualenv Python
+ENTRYPOINT ["/app/.venv/bin/python", "-m", "app.main"]

@@ -15,9 +15,8 @@ Fetches travel warnings with daily caching and provides recommendations per coun
 # Constants
 # ---------------------------------------------------------------------
 RESOURCE_ID = "2a01d234-b2b0-4d46-baa0-cec05c401e7d"
-DATASET_URL = settings.GOV_IL_API_URL + f"?resource_id={RESOURCE_ID}"
 DATASET_LIMIT = 32000
-
+settings.CACHE_DIR.mkdir(parents=True, exist_ok=True)
 CACHE_FILE = settings.CACHE_DIR / "travel_warnings_cache.json"
 BASE_FILE = settings.DATA_DIR / "country_en_to_he.json"
 CACHE_TTL = timedelta(days=1)
@@ -42,7 +41,7 @@ def is_cache_fresh(path: Path, ttl: timedelta) -> bool:
 # ---------------------------------------------------------------------
 def fetch_travel_warnings_from_api() -> list[dict]:
     response = requests.get(
-        DATASET_URL,
+        settings.GOV_IL_API_URL,
         params={
             "resource_id": RESOURCE_ID,
             "limit": DATASET_LIMIT,
