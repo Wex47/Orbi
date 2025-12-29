@@ -1,6 +1,14 @@
 from __future__ import annotations
+from typing import Dict, Any
 
-def finalizer_node(state: dict) -> dict:
+def finalizer_node(state: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Finalizer node that appends warnings to the final answer
+    based on verification status and tool usage.
+
+    inputs: 'execution', 'verified' (bool), 'tools_used' (bool), 'route'
+    outputs: 'final_answer', 'messages'
+    """
     execution = state.get("execution") or ""
     verified = bool(state.get("verified"))
     tools_used = bool(state.get("tools_used"))
@@ -26,6 +34,5 @@ def finalizer_node(state: dict) -> dict:
 
     return {
         "final_answer": final_answer,
-        # Append to conversation memory
-        "messages": [{"role": "assistant", "content": final_answer}],
+        "messages": [{"role": "assistant", "content": final_answer}], # Append to conversation memory
     }

@@ -1,39 +1,33 @@
+from typing import List, Optional, Dict, Any
 from langchain.tools import tool
-from app.domain.climate.geo import geocode_place
-from app.domain.climate.climate import get_monthly_climate_by_coords
 from datetime import date
-from typing import Optional
-from app.domain.recommendations.travel_recommendations import (
-    get_travel_recommendations,
-)
+from datetime import datetime
+from app.domain.climate import fetch_climate_data
+from app.domain.flight_search import search_flights
+from app.domain.travel_warnings import fetch_travel_warnings
+from app.domain.travel_recommendations import get_travel_recommendations
+from app.domain.timezone_service import get_current_time_by_timezone
+from app.domain.entry_requirements import get_visa_requirements
+from app.domain.embassies import get_israeli_embassies
+
+"""
+Tools for retrieving travel-related information.
+Notice that the description of each tool is very important, as it guides the agent on when to use it.
+The tool description is not 1-to-1 with the function docstring, as it may contain additional instructions and context for the agent.
+"""
 
 @tool
 def get_place_climate(place_name: str, month: str) -> str:
     """
-    Get historical climate details for a place and month.
+    Returns historical climate averages for a given place and month.
+
+    The tool resolves the place name to geographic coordinates, retrieves
+    historical monthly climate data, and summarizes key metrics such as
+    average temperature and precipitation. Use this tool when factual
+    climate data is required to support travel or seasonal decisions.
     """
+    return fetch_climate_data(place_name=place_name,month=month)
 
-    try:
-        coords = geocode_place(place_name)
-        climate = get_monthly_climate_by_coords(
-            coords["latitude"],
-            coords["longitude"],
-            month
-        )
-
-        return (
-            f"{coords['name']}, {coords['country']} in {month.capitalize()}:\n"
-            f"- Avg temperature: {climate['average_temperature_c']}°C\n"
-            f"- Precipitation: {climate['average_precipitation_mm']} mm"
-        )
-
-    except Exception as e:
-        return str(e)
-
-
-########################################
-
-from app.domain.flights.flight_search import search_flights
 
 @tool
 def search_flights_tool(
@@ -62,9 +56,6 @@ def search_flights_tool(
     )
 
 
-#########################
-
-
 @tool
 def travel_recommendations_tool(
     city: str,
@@ -85,22 +76,12 @@ def travel_recommendations_tool(
     )
 
 
-########################################
-
-
-from app.domain.time.timezone_service import get_current_time_by_timezone
-
 @tool
 def get_current_time(timezone: str) -> dict:
     """
     Retrieve the current local time and timezone metadata using a real-time API.
+    ALWAYS use this tool to get date or time in a SPECIFIED place or timezone in the world.
 
-    IMPORTANT:
-    - This tool PROVIDES real-time information.
-    - Use this tool whenever the user asks for the current time, date,
-      or timezone information for any location.
-    - Do NOT answer such questions without calling this tool.
-    - Do NOT state that you lack real-time access if this tool is available.
 
     Input:
         timezone (str): Timezone in Area/Location or Area/Location/Region format.
@@ -130,6 +111,67 @@ def get_current_time(timezone: str) -> dict:
     return get_current_time_by_timezone(timezone)
 
 
+@tool
+def get_current_local_datetime() -> str:
+    """
+    Returns the current date and time at the moment of invocation.
+    USE THIS TOOL FOR ANY FOR ANY QUESTION ABOUT TODAY'S DATE.
+    """
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+@tool
+def get_travel_warnings(country: str) -> List[str]:
+    """
+    Returns official Israeli travel warning recommendations for a given country.
+
+    Input:
+    - country: English country name (e.g., "Italy", "Japan", "United States")
+
+    Output:
+    - A list of travel warning recommendation strings.
+      Returns an empty list if the country is unsupported or no warnings exist.
+    """
+    recommendations = fetch_travel_warnings(country)
+
+    # Convert set → list for JSON / tool compatibility
+    return sorted(recommendations)
+
+
+@tool
+def get_entry_requirements(
+    passport_country_code: str,
+    destination_country_code: str,
+) -> Dict[str, Any]:
+    """
+    Return visa and entry requirements for travel between two countries.
+
+    Inputs:
+    - passport_country_code: ISO 3166-1 alpha-2 code of the passport country (e.g. "US", "CN")
+    - destination_country_code: ISO 3166-1 alpha-2 code of the destination country
+
+    Output includes:
+    - visa type and duration (e.g. visa-free, visa on arrival, eVisa)
+    - mandatory entry or registration requirements (if any)
+
+    Information is best-effort and may change; users must verify with official sources.
+    """
+    return get_visa_requirements(
+        passport_country_code=passport_country_code,
+        destination_country_code=destination_country_code,
+    )
+
+
+@tool
+def get_israeli_embassy_contacts(
+    country: Optional[str] = None,
+) -> List[Dict[str, str]]:
+    """
+    Return contact details for Israeli embassies and consulates.
+    Optionally filter by country name.
+    if the country name didn't work - try again with alternative name.
+    """
+    return get_israeli_embassies(country=country)
 
 
 #########################################
@@ -138,5 +180,9 @@ TRAVEL_TOOLS = [
     get_place_climate,
     travel_recommendations_tool,
     search_flights_tool,
-    get_current_time
+    get_current_time,
+    get_current_local_datetime,
+    get_travel_warnings,
+    get_entry_requirements,
+    get_israeli_embassy_contacts
 ]

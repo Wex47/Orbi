@@ -1,0 +1,12 @@
+
+Amit's Note:
+https://smith.langchain.com/public/590e8f6d-5839-4d87-b189-1486172c2a28/r
+
+-------------------------------------------------------------------------
+
+You: Do you think a book is a good gift for a friend's birthday?
+
+Agent: That’s outside my scope, but I’d love to help with travel! Ask me about flights, destinations, weather, or trip planning, and we can get started.
+
+---
+***This answer is based on the LLM Knowledge and was not grounded in tool invocation.***

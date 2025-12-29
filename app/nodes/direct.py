@@ -1,6 +1,9 @@
 from __future__ import annotations
-
-from app.infrastructure.llm import get_chat_model
+from typing import Dict, Any
+from app.infrastructure.llm import get_lightweight_chat_model
+import logging
+from app.config.settings import settings
+logger = logging.getLogger(__name__)
 
 DIRECT_SYSTEM = """
 You are a professional travel assistant.
@@ -11,13 +14,28 @@ Special rule:
 
 """.strip()
 
+def direct_node(state: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Direct answer node for simple travel-related queries,
+    such as general travel advice, information that doesn't require tool usage,
+    or questions that can be answered from conversation context alone.
 
-def direct_node(state: dict) -> dict:
-    model = get_chat_model()
+    inputs: 'messages'
+    outputs: 'execution', 'verified' (always False)
+    """
+
+    model = get_lightweight_chat_model()
     messages = [{"role": "system", "content": DIRECT_SYSTEM}] + state["messages"]
-    answer = model.invoke(messages).content
+    
+    try:
+        response = model.invoke(messages).content
+        logger.debug(settings.SUCCESS_GENERIC)
+
+    except Exception as exc:
+        logger.exception(settings.FAILED_GENERIC)
+        raise exc
 
     return {
-        "execution": answer,
-        "verified": True,  # direct path doesn't run verification in this simple setup
+        "execution": response,
+        "verified": False,
     }

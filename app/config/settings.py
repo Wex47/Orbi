@@ -1,73 +1,14 @@
-# # app/config/settings.py
-
-# import os
-# from typing import Optional
-# from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
-# class Settings(BaseSettings):
-#     # --------------------
-#     # App
-#     # --------------------
-#     APP_NAME: str = "Orbi"
-#     ENV: str = "dev"
-
-#     # --------------------
-#     # Model
-#     # --------------------
-#     MODEL_NAME: str = "claude-sonnet-4-5-20250929"
-#     MODEL_TEMP: float = 0.2
-
-#     # MODEL KEYS
-#     OPENAI_API_KEY: Optional[str]
-#     GOOGLE_API_KEY: Optional[str]
-#     ANTHROPIC_API_KEY: Optional[str]
-
-#     # 
-#     # Explicit env injection for testing purposes (intentional)
-#     if self.anthropic_api_key:
-#         os.environ["ANTHROPIC_API_KEY"] = settings.anthropic_api_key
-
-#     if settings.openai_api_key:
-#         os.environ["OPENAI_API_KEY"] = settings.openai_api_key
-
-#     if settings.google_api_key:
-#         os.environ["GOOGLE_API_KEY"] = settings.google_api_key
-
-#     # --------------------
-#     # Amadeus
-#     # --------------------
-#     AMADEUS_API_KEY: str
-#     AMADEUS_API_SECRET: str
-#     AMADEUS_BASE_URL: str = "https://test.api.amadeus.com"
-#     AMADEUS_TOKEN_URL: str = "https://test.api.amadeus.com/v1/security/oauth2/token"
-
-#     # --------------------
-#     # Weather
-#     # --------------------
-#     OPEN_METEO_BASE_URL: str = "https://api.open-meteo.com"
-
-#     # --------------------
-#     # HTTP
-#     # --------------------
-#     HTTP_TIMEOUT: int = 10
-
-#     model_config = SettingsConfigDict(
-#         env_file=".env",
-#         env_file_encoding="utf-8",
-#     )
-
-# settings = Settings()
-
-# app/config/settings.py
-
-import os
-from typing import Optional, Dict, Tuple
+from __future__ import annotations
+from typing import Optional
+from pathlib import Path
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from langchain.chat_models import init_chat_model
-
 from dotenv import load_dotenv
-load_dotenv()  # <-- must be before BaseSettings is instantiated
+
+
+# Load .env early, before Settings instantiation
+load_dotenv()
+
 
 class Settings(BaseSettings):
     # --------------------
@@ -75,21 +16,48 @@ class Settings(BaseSettings):
     # --------------------
     APP_NAME: str = "Orbi"
     ENV: str = "dev"
+    THREAD_ID: str = "123" # fixed for testing persistence. you can change to None to check non-persistence.
 
     # --------------------
-    # Model
+    # Logging
+    # --------------------
+    LOG_LEVEL: str = "INFO"
+    LOG_FORMAT: str = "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
+    LOG_FILE_NAME: str = "app.log"
+    LOG_MAX_BYTES: int = 5_000_000  # 5 MB
+    LOG_BACKUP_COUNT: int = 3
+    SUCCESS_GENERIC: str = "invocation succeeded"
+    FAILED_GENERIC: str = "invocation failed"
+
+    # --------------------
+    # Paths
+    # --------------------
+    PROJECT_ROOT: Path = Path(__file__).resolve().parents[2]
+    DATA_DIR: Path = PROJECT_ROOT / "app" / "data"
+    CACHE_DIR: Path = PROJECT_ROOT / "app" / "cache"
+
+    # --------------------
+    # Models
     # --------------------
     MODEL_NAME: str = "claude-sonnet-4-5-20250929"
     MODEL_TEMP: float = 0.2
 
-    # --------------------
-    # Verifier Model (Gemini)
-    # --------------------
+    LIGHTWEIGHT_MODEL_NAME: str = "claude-haiku-4-5-20251001"
+    LIGHTWEIGHT_MODEL_TEMP: float = 0.2
+
     VERIFIER_MODEL_NAME: str = "gemini-2.5-flash"
     VERIFIER_TEMP: float = 0.0
 
-    # Model API keys
-    OPENAI_API_KEY: Optional[str] = None
+    # --------------------
+    # Summarization
+    # --------------------
+    MAX_SUMMARY_INPUT_TOKENS: int = 6000
+    SUMMARY_TOKENS_THRESHOLD: int = 4000
+    MAX_SUMMARY_OUTPUT_TOKENS: int = 256
+
+    # --------------------
+    # API Keys
+    # --------------------
     GOOGLE_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
 
@@ -99,7 +67,9 @@ class Settings(BaseSettings):
     AMADEUS_API_KEY: str
     AMADEUS_API_SECRET: str
     AMADEUS_BASE_URL: str = "https://test.api.amadeus.com"
-    AMADEUS_TOKEN_URL: str = "https://test.api.amadeus.com/v1/security/oauth2/token"
+    AMADEUS_TOKEN_URL: str = (
+        "https://test.api.amadeus.com/v1/security/oauth2/token"
+    )
 
     # --------------------
     # Weather
@@ -107,59 +77,42 @@ class Settings(BaseSettings):
     OPEN_METEO_BASE_URL: str = "https://api.open-meteo.com"
 
     # --------------------
+    # Government APIs
+    # --------------------
+    GOV_IL_API_URL: str = "https://data.gov.il/api/3/action/datastore_search"
+
+    # --------------------
+    # RapidAPI
+    # --------------------
+    RAPIDAPI_KEY: str
+
+    # --------------------
     # HTTP
     # --------------------
     HTTP_TIMEOUT: int = 10
 
+    # --------------------
+    # Database
+    # --------------------
+    POSTGRES_HOST: str = Field(..., alias="POSTGRES_HOST")
+    POSTGRES_PORT: int = Field(..., alias="POSTGRES_PORT")
+    POSTGRES_USER: str = Field(..., alias="POSTGRES_USER")
+    POSTGRES_PASSWORD: str = Field(..., alias="POSTGRES_PASSWORD")
+    POSTGRES_DB: str = Field(..., alias="POSTGRES_DB")
 
-    # ------------------------------------------------------------------
-    # Pydantic config
-    # ------------------------------------------------------------------
+    @property
+    def postgres_dsn(self) -> str:
+        return (
+            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
 
-    # ------------------------------------------------------------------
-    # INTERNAL MODEL CACHE (class-level)
-    # ------------------------------------------------------------------
-    _model_cache: Dict[Tuple[str, float], object] = {}
-
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
-    def get_chat_model(
-        self,
-        *,
-        temperature: Optional[float] = None,
-    ):
-        """
-        Return a cached LangChain chat model.
-
-        Models are cached per (MODEL_NAME, temperature).
-        """
-        temp = self.MODEL_TEMP if temperature is None else temperature
-        key = (self.MODEL_NAME, temp)
-
-        if key not in self._model_cache:
-            self._model_cache[key] = init_chat_model(
-                self.MODEL_NAME,
-                temperature=temp,
-            )
-
-        return self._model_cache[key]
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
 
-
-# --------------------
-# Instantiate settings
-# --------------------
+# Singleton settings object
 settings = Settings()
-
-# --------------------
-# Explicit env injection (intentional, centralized)
-# --------------------
-if settings.ANTHROPIC_API_KEY:
-    os.environ["ANTHROPIC_API_KEY"] = settings.ANTHROPIC_API_KEY
-
-if settings.OPENAI_API_KEY:
-    os.environ["OPENAI_API_KEY"] = settings.OPENAI_API_KEY
-
-if settings.GOOGLE_API_KEY:
-    os.environ["GOOGLE_API_KEY"] = settings.GOOGLE_API_KEY

@@ -3,6 +3,8 @@ import requests
 from typing import Optional
 from app.config.settings import settings
 
+"""Handles authentication with the Amadeus API."""
+
 class AmadeusAuth:
 
     def __init__(self):
