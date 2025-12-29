@@ -1,0 +1,39 @@
+
+Amit's Note:
+https://smith.langchain.com/public/5473d58f-3a0f-4785-9bd1-b0478800f8b3/r
+
+-------------------------------------------------------------------------
+
+You: I am thinking about going to Ireland 1 day after the silvester. anything important i should know?
+
+Agent: Great! Here's what you should know about traveling to Ireland on **January 1st, 2026** (1 day after Silvester/New Year's Eve):
+
+## **Visa & Entry Requirements** ✅
+- **Good news**: Israeli citizens do **not need a visa** for Ireland
+- You can stay visa-free for up to **90 days**
+- Your passport must be valid for at least **3 months longer than your stay**
+
+## **Travel Warnings** ⚠️
+According to Israeli travel advisories:
+1. **Level 2 Alert**: A recommendation to take **increased precautions** (standard for many countries)
+2. **Important**: The Israeli Embassy in Ireland was **closed as of December 15, 2024** due to a decision by the Israeli Foreign Minister
+   - This means limited consular services may be available
+   - Consider this if you need embassy assistance
+
+## **Weather & Climate** 🌧️
+- **Average temperature**: Around 5°C (41°F)
+- **Average precipitation**: 82mm of rain
+- **What to pack**: Warm, waterproof clothing, layers, and a good jacket are essential
+
+## **Currency & Practical Info** 💶
+- Currency: **Euro (EUR)** - Exchange rate: ~3.76 ILS per EUR
+- Phone code: +353
+- Timezone: GMT (±00:00)
+
+## **Recommendations**
+- Book accommodations early (post-holiday period can still be busy)
+- Check current health advisories before traveling
+- Have travel insurance that covers medical needs
+- Verify the current status of Israeli consular services if you need them
+
+Would you like help with flight searches, accommodation recommendations, or specific activities in Ireland?

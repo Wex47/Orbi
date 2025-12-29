@@ -16,12 +16,12 @@ class Settings(BaseSettings):
     # --------------------
     APP_NAME: str = "Orbi"
     ENV: str = "dev"
-    THREAD_ID: str = "8" # fixed for testing persistence. you can change to None to check non-persistence.
+    THREAD_ID: str = "15" # fixed for testing persistence. you can change to None to check non-persistence.
 
     # --------------------
     # Logging
     # --------------------
-    LOG_LEVEL: str = "DEBUG"
+    LOG_LEVEL: str = "INFO"
     LOG_FORMAT: str = "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
     LOG_FILE_NAME: str = "app.log"
     LOG_MAX_BYTES: int = 5_000_000  # 5 MB

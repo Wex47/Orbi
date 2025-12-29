@@ -1,0 +1,44 @@
+
+Amit's Note:
+https://smith.langchain.com/public/98baa38c-6b61-4b70-a52c-8968f43ebb3a/r
+
+-------------------------------------------------------------------------
+
+
+
+You: Yes please recommend me what to do around dublin, and also find me a flight from tel aviv to dublin
+
+Agent: Perfect! Here's what I found for you:
+
+## **✈️ Flight Options from Tel Aviv to Dublin (January 1st, 2026)**
+
+| Option | Price | Duration | Route | Details |
+|--------|-------|----------|-------|---------|
+| **1** | €173.09 | 22h 50m | TLV → OTP → DUB | **CHEAPEST** - Depart 11:30 PM, arrive Jan 2 at 8:20 PM |
+| **2** | €192.80 | 25h | TLV → ATH → DUB | Depart 12:20 PM, arrive Jan 2 at 11:20 AM |
+| **3** | €282.72 | 25h 15m | TLV → DUS → DUB | Depart 12:55 PM, arrive Jan 2 at 12:10 PM |
+| **4** | €387.83 | 9h 25m | TLV → LHR → DUB | **FASTEST** - Depart 12:40 PM, arrive same day at 8:05 PM |
+| **5** | €392.17 | 8h 45m | TLV → ZRH → DUB | **FASTEST** - Depart 5:20 AM, arrive same day at 12:05 PM |
+
+**My recommendation**: Option 4 or 5 if you want to arrive on January 1st and maximize your time in Dublin. Option 1 is the most budget-friendly if you don't mind arriving on January 2nd.
+
+---
+
+## **🎭 Things to Do in Dublin**
+
+Here are recommended activities and tours:
+
+1. **Dublin Dark Side Tour** - €3 - Explore the darker history of Dublin
+2. **Dublin Self-Guided Audio Walking Tour** - €4 - Explore at your own pace
+3. **Luggage Storage at O'Connell** - €5 - Convenient storage option
+4. **National Print Museum Guided Tour** - €5 - Learn about printing history
+5. **Turtle Bunbury's Dublin Audio Tour** - €5 - Self-guided literary tour
+6. **Marlay Park Heritage Tour** - €5 - Explore Dublin's famous park
+7. **Audio Guide App by TouringBee** - €6 - Comprehensive city guide
+8. **Dublin Exploration Game: Romantic History** - €7 - Interactive experience
+9. **Dún Laoghaire's East Pier Stroll** - €7 - Scenic coastal walk
+10. **Stories of Dublin Audio Tour** - €8 - Detailed historical narratives
+
+**Pro tip**: Dublin has excellent pubs, Georgian architecture, Trinity College, the Guinness Storehouse, and vibrant nightlife. The city is very walkable and perfect for exploring on foot!
+
+Would you like help booking any of these flights or need more information about Dublin attractions?

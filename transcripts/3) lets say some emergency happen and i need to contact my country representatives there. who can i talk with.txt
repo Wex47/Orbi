@@ -1,0 +1,34 @@
+
+Amit's Note:
+https://smith.langchain.com/public/739c185d-ac95-4342-a55d-b0481c321444/r
+
+-------------------------------------------------------------------------
+
+You: lets say some emergency happen and i need to contact my country representatives there. who can i talk with?
+
+Agent: ## **🇮🇱 Israeli Embassy in Dublin - Emergency Contact**
+
+**Israeli Embassy in Dublin**
+- **Address**: 23 Shelbourne Road, Ballsbridge, Dublin
+- **Phone**: +353-1-2309400
+- **Email**: info@dublin.mfa.gov.il
+- **Website**: https://embassies.gov.il/dublin
+
+---
+
+## **⚠️ Important Note**
+
+As I mentioned earlier, **the Israeli Embassy in Dublin was closed as of December 15, 2024** due to a decision by the Israeli Foreign Minister. This means:
+
+- **Limited or no consular services** may be available
+- You should **call ahead** before visiting to confirm current operations
+- For emergencies, you may need to contact the Israeli Foreign Ministry directly or seek assistance through other channels
+
+**Recommendation**: Before your trip, contact the embassy via phone or email to:
+1. Confirm they are operational
+2. Register your travel (optional but recommended)
+3. Ask about emergency procedures if the embassy is closed
+
+**Alternative**: If the Dublin embassy is unavailable, you can contact the Israeli Foreign Ministry's emergency hotline or the nearest operational Israeli diplomatic mission.
+
+Would you like any other information for your trip?
