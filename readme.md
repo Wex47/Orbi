@@ -19,6 +19,7 @@ Orbi is built as a **LangGraph-driven conversational system** that:
   - Multi-step tool-assisted execution
 - Integrates **multiple real-world data sources** for factual grounding
 - Actively **detects and prevents hallucinations** using a dedicated verifier model
+- Please note that currently Orbi always continues previous conversation
 
 The assistant is exposed via a **CLI interface**.
 
@@ -60,8 +61,8 @@ Orbi is implemented as a **LangGraph execution graph**, where each node has a **
 
 ### Architecture Diagrams
 
-![Execution Graph](graph_architecture.png)
-![System Architecture](system_architecture.png)
+![Execution Graph](pictures/graph_architecture.png)
+![System Architecture](pictures/system_architecture.png)
 
 ---
 
@@ -222,6 +223,7 @@ Hallucination control is handled across multiple layers:
 
 - Fully asynchronous design to support concurrent clients and scalable deployment
 - Secure communication with PostgreSQL
+- Centralized caching management
 - Controlled and concise chatbot responses to reduce verbosity
 - Strongly typed contracts using Pydantic and dataclasses for node and domain function outputs
 - Comprehensive unit and smoke test coverage
@@ -250,21 +252,80 @@ For example:
 * Voice interaction
 * Persistent user preferences ("long term memory")
 * User management
+* Choose Start a new conversation or Continue an existing one
 
 ---
 
-## 🚀 Running the Project
 
-### Prerequisites
+## Running Orbi
 
-* Python 3.10+
-* `uv` package manager
-* Git
-* Running PostgreSQL instance
+Orbi can be run either **inside Docker** or **locally using `uv`**.  
+Both modes use the same environment configuration.
 
 ---
 
-## Running Orbi with `uv`
+## Environment Configuration
+
+Orbi requires a `.env` file in the project root.
+
+Create a file named `.env` with the following contents:
+
+```env
+# LLM Providers
+GOOGLE_API_KEY=your_google_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key
+
+# RapidAPI (entry requirements)
+RAPIDAPI_KEY=your_key
+
+# Amadeus (Flights, recommendations)
+AMADEUS_API_KEY=your_key
+AMADEUS_API_SECRET=your_secret
+
+# PostgreSQL
+POSTGRES_HOST=<your-docker-host>
+POSTGRES_PORT=5432
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
+POSTGRES_DB=orbi
+````
+
+> **Docker users:**
+> If PostgreSQL is running on your host machine, set
+> `POSTGRES_HOST=host.docker.internal`.
+
+---
+
+## Option A — Run with Docker
+
+
+### 1️⃣ Build the Docker Image
+
+```bash
+docker build -t orbi:latest .
+```
+
+---
+
+### 2️⃣ Run Orbi
+
+```bash
+docker run -it --env-file .env orbi:latest
+```
+
+Expected output:
+
+```text
+Welcome to Orbi! Type 'exit' or 'quit' to leave.
+[thread_id=...]
+You:
+```
+
+---
+
+## Option B — Run Locally with `uv`
+
+Use this option if you prefer running Orbi directly on your machine.
 
 ### 1️⃣ Install `uv`
 
@@ -303,37 +364,11 @@ cd Orbi
 uv sync
 ```
 
-Creates an isolated environment and installs dependencies from `pyproject.toml`.
+Creates an isolated virtual environment using `pyproject.toml` and `uv.lock`.
 
 ---
 
-### 4️⃣ Configure Environment Variables
-
-Create a `.env` file:
-
-```env
-# LLM Providers
-GOOGLE_API_KEY=your_google_api_key
-ANTHROPIC_API_KEY=your_anthropic_api_key
-
-# RapidAPI (entry requirements)
-RAPIDAPI_KEY=your_key
-
-# Amadeus (Flights, recommendations)
-AMADEUS_API_KEY=your_key
-AMADEUS_API_SECRET=your_secret
-
-# PostgreSQL
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=user
-POSTGRES_PASSWORD=password
-POSTGRES_DB=orbi
-```
-
----
-
-### 5️⃣ Run the Assistant
+### 4️⃣ Run the Assistant
 
 ```bash
 uv run python -m app.main
@@ -349,17 +384,15 @@ You:
 
 ---
 
-### 6️⃣ Example Queries
+## Example Queries
 
 ```text
 Is April a good time to visit Tokyo?
 What’s the weather like in Paris in October?
-What flights are available from tel aviv to tokyo on December 28, 2025?
+What flights are available from Tel Aviv to Tokyo on December 28, 2025?
 What time will it be in Tokyo in 8 hours?
 ```
 
 ---
 
 No further setup is required.
-
----

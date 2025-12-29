@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     # --------------------
     APP_NAME: str = "Orbi"
     ENV: str = "dev"
-    THREAD_ID: str = "15" # fixed for testing persistence. you can change to None to check non-persistence.
+    THREAD_ID: str = "123" # fixed for testing persistence. you can change to None to check non-persistence.
 
     # --------------------
     # Logging
@@ -58,7 +58,6 @@ class Settings(BaseSettings):
     # --------------------
     # API Keys
     # --------------------
-    OPENAI_API_KEY: Optional[str] = None
     GOOGLE_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
 
